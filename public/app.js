@@ -49,15 +49,15 @@ async function load(){
     if(firstTurnAmountEl) firstTurnAmountEl.textContent = `${fmt(firstTurnAmount)}`;
     if(priorityRuleText){
       priorityRuleText.textContent = maxAmountNow > 0
-        ? `ตอนนี้ยอดสูงสุดที่อยู่ในคิวคือ ${fmt(maxAmountNow)} • ถ้าโดเนท ${fmt(firstTurnAmount)} ขึ้นไป จะขึ้นระดับใหม่และได้สิทธิ์ตาหน้า`
+        ? `ยอดโดเนทสูงสุดตอนนี้ ${fmt(maxAmountNow)} • ตาหน้าคือ ${fmt(firstTurnAmount)}`
         : "ยังไม่มีคิว • ตาหน้าจะเริ่มที่ 10 บาท";
     }
     if(priorityExampleTitle) priorityExampleTitle.textContent = maxAmountNow > 0
-      ? `ยอดสูงสุดตอนนี้ ${fmt(maxAmountNow)} → ตาหน้าต้องโดเนท ${fmt(firstTurnAmount)} ขึ้นไป`
-      : "ตัวอย่าง: 10 บาท → 15 บาท";
+      ? `ยอดสูงสุด ${fmt(maxAmountNow)} → ตาหน้า ${fmt(firstTurnAmount)}`
+      : "ตัวอย่าง: โด 40 บาท → ตาหน้า 50 บาท";
     if(priorityExampleText) priorityExampleText.textContent = maxAmountNow > 0
-      ? `ระบบจะขยับทีละ 10 บาทตามระดับคิว • ถ้ายอดสูงสุดเป็น ${fmt(maxAmountNow)} ตาหน้าคือ ${fmt(firstTurnAmount)}`
-      : "ถ้ายอดอยู่ระดับเดียวกัน คนที่เข้าก่อนยังได้ก่อน • ตาหน้าจะคำนวณจากยอดสูงสุดในคิว";
+      ? `ระบบจัดอันดับตามยอดโดเนทจากมากไปน้อย • ยอดสูงสุด + 10 บาท = ยอดที่ต้องโดเนทสำหรับตาหน้า`
+      : "เมื่อมีคิว ระบบจะคำนวณยอดสูงสุด + 10 บาทให้อัตโนมัติ";
 
     q.innerHTML=d.rows.map((r,i)=>{
       const amount=Number(r.amount)||0;
