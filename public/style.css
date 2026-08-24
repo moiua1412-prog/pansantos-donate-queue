@@ -24,3 +24,116 @@ body{margin:0;min-height:100vh;font-family:Inter,Arial,"Noto Sans Thai",sans-ser
 .donate-nav{padding:10px 14px;border-radius:12px;color:#fff!important;text-decoration:none;background:linear-gradient(100deg,#ff4f8b,#ff7b45);border:1px solid #ff7b4570;box-shadow:0 8px 22px #ff5b7b22;transition:.2s}.donate-nav:hover{transform:translateY(-2px);box-shadow:0 12px 28px #ff5b7b35}
 .donate-btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:13px;color:#fff;text-decoration:none;font-weight:800;background:linear-gradient(100deg,#ff4f8b,#ff7b45);border:1px solid #ff7b4580;box-shadow:0 14px 28px #ff5b7b20;transition:.22s}.donate-btn:hover{transform:translateY(-2px);box-shadow:0 18px 34px #ff5b7b38}
 @media(max-width:780px){.donate-nav{display:none}.hero-actions{flex-wrap:wrap}.donate-btn{width:100%}}
+
+
+/* =========================================
+   PAN SANTOS EXTRA EFFECTS + MOBILE FIX
+   ========================================= */
+
+body{position:relative}
+
+.fx-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.topbar,.container,.modal{position:relative;z-index:3}
+
+/* Moving background glow */
+body::before,body::after{content:"";position:fixed;width:360px;height:360px;border-radius:50%;pointer-events:none;z-index:0;filter:blur(90px);opacity:.16}
+body::before{left:-180px;top:28%;background:#7a4cff;animation:bgGlow1 10s ease-in-out infinite alternate}
+body::after{right:-180px;bottom:5%;background:#18d7ff;animation:bgGlow2 12s ease-in-out infinite alternate}
+@keyframes bgGlow1{to{transform:translate(220px,-80px) scale(1.2)}}
+@keyframes bgGlow2{to{transform:translate(-190px,-100px) scale(1.25)}}
+
+/* Floating guns */
+.weapon{position:absolute;font-size:44px;opacity:.11;filter:drop-shadow(0 0 15px rgba(130,100,255,.65));will-change:transform}
+.weapon-left{left:2%;bottom:14%;transform:rotate(-24deg);animation:weaponLeft 7s ease-in-out infinite}
+.weapon-right{right:3%;top:24%;transform:rotate(155deg);animation:weaponRight 8s ease-in-out infinite}
+@keyframes weaponLeft{0%,100%{transform:translate3d(0,0,0) rotate(-24deg)}50%{transform:translate3d(22px,-18px,0) rotate(-15deg)}}
+@keyframes weaponRight{0%,100%{transform:translate3d(0,0,0) rotate(155deg)}50%{transform:translate3d(-20px,18px,0) rotate(165deg)}}
+
+/* Flying bullets */
+.bullet{position:absolute;width:22px;height:5px;border-radius:99px;background:linear-gradient(90deg,#fff,#ffd166);box-shadow:0 0 10px rgba(255,209,102,.85),0 0 25px rgba(255,130,80,.35);opacity:0;transform:rotate(-12deg)}
+.bullet-1{top:20%;left:-40px;animation:bulletFly 5.5s linear infinite}
+.bullet-2{top:42%;left:-60px;animation:bulletFly 7s linear infinite 1.7s}
+.bullet-3{top:67%;left:-50px;animation:bulletFly 6.2s linear infinite 3.1s}
+.bullet-4{top:83%;left:-70px;animation:bulletFly 8s linear infinite 4.4s}
+@keyframes bulletFly{0%{left:-60px;opacity:0}7%{opacity:.9}88%{opacity:.9}100%{left:110vw;opacity:0}}
+
+/* Little sparks */
+.spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 12px 4px rgba(90,210,255,.75);opacity:.2;animation:sparkFloat 3s ease-in-out infinite}
+.spark-1{left:18%;top:29%}.spark-2{left:71%;top:17%;animation-delay:.8s}.spark-3{left:85%;top:72%;animation-delay:1.5s}.spark-4{left:28%;top:82%;animation-delay:2.1s}
+@keyframes sparkFloat{0%,100%{opacity:.15;transform:translateY(0) scale(.7)}50%{opacity:1;transform:translateY(-20px) scale(1.3)}}
+
+/* Donate button: mouse + click feel */
+.donate-btn,.donate-nav,.primary-btn{position:relative;overflow:hidden;isolation:isolate}
+.donate-btn::before,.donate-nav::before,.primary-btn::before{content:"";position:absolute;top:0;left:-120%;width:70%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.38),transparent);transform:skewX(-20deg);transition:left .65s ease;pointer-events:none}
+.donate-btn:hover::before,.donate-nav:hover::before,.primary-btn:hover::before{left:145%}
+.donate-btn::after{content:"🖱️";position:absolute;right:12px;bottom:-28px;font-size:19px;opacity:0;pointer-events:none}
+.donate-btn:hover::after{animation:mouseClick 1s ease forwards}
+@keyframes mouseClick{0%{opacity:0;transform:translate(14px,10px) rotate(-15deg)}35%{opacity:1;transform:translate(0,-2px) rotate(0)}58%{transform:translate(0,2px) scale(.88)}75%{transform:translate(0,-1px) scale(1.06)}100%{opacity:0;transform:translate(-5px,-10px)}}
+.donate-btn:active,.donate-nav:active,.primary-btn:active{transform:scale(.95)!important}
+
+/* Hero shooting trail */
+.hero::after{content:"";position:absolute;width:170px;height:2px;right:-200px;top:28%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);transform:rotate(-18deg);opacity:0;pointer-events:none;animation:heroShot 4s linear infinite}
+@keyframes heroShot{0%,12%{right:-200px;opacity:0}18%{opacity:.9}45%{right:110%;opacity:0}100%{right:110%;opacity:0}}
+
+/* Better touch feedback */
+button,.donate-btn,.donate-nav{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+
+/* Mobile layout */
+@media(max-width:900px){
+  .topbar{width:calc(100% - 20px);margin-left:auto;margin-right:auto}
+  .container{width:calc(100% - 20px)}
+  .hero{padding:26px 20px}
+  .hero h2{font-size:clamp(34px,7vw,46px)}
+  .hero-copy{max-width:100%}
+  .hero-visual{margin:20px auto 0}
+  .hero-actions{flex-wrap:wrap}
+  .last-update{width:100%}
+  .table-shell{-webkit-overflow-scrolling:touch}
+}
+
+@media(max-width:620px){
+  .topbar{top:6px;margin-top:6px;width:calc(100% - 12px);padding:9px 10px;border-radius:16px;gap:8px}
+  .brand{gap:8px;min-width:0}
+  .profile-avatar{width:40px;height:40px;border-radius:12px}
+  .brand h1{font-size:15px;white-space:nowrap}
+  .brand p{font-size:8px;letter-spacing:1.5px}
+  .topnav{gap:5px}
+  .topnav a.active{display:none}
+  .nav-admin{padding:8px 9px;font-size:11px}
+  .donate-nav{padding:8px 9px;font-size:11px}
+  .container{width:calc(100% - 12px);margin-top:16px}
+  .hero{padding:20px 15px;border-radius:20px}
+  .hero h2{font-size:34px;letter-spacing:-1px}
+  .hero-copy p{font-size:13px;line-height:1.7}
+  .hero-actions{gap:9px}
+  .primary-btn,.donate-btn{width:100%;min-height:50px}
+  .hero-visual{width:245px;height:225px}
+  .hero-avatar{width:125px;height:125px}
+  .ring-1{width:185px;height:185px}.ring-2{width:225px;height:225px}
+  .float-top{right:0;top:20px}.float-bottom{left:0;bottom:18px}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .stat{padding:11px 9px;gap:9px;border-radius:15px}
+  .stat-icon{width:38px;height:38px;border-radius:11px;font-size:15px;flex:0 0 auto}
+  .stat b{font-size:19px}
+  .stat span{font-size:10px}.stat small{font-size:8px}
+  .queue-panel{padding:13px;border-radius:18px}
+  .section-head{align-items:flex-start;gap:10px}
+  .section-head h3{font-size:20px}
+  .table-shell table{min-width:650px}
+  .weapon{font-size:30px;opacity:.07}
+  .bullet{width:16px;height:4px}
+  .fx-layer{opacity:.75}
+}
+
+@media(max-width:380px){
+  .topbar{align-items:flex-start}
+  .nav-admin{font-size:10px;padding:7px}
+  .hero h2{font-size:29px}
+  .stats-grid{grid-template-columns:1fr}
+  .hero-visual{width:220px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .fx-layer *,.hero::after,body::before,body::after{animation:none!important}
+  *{scroll-behavior:auto!important}
+}
