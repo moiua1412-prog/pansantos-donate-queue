@@ -49,11 +49,15 @@ async function load(){
     if(firstTurnAmountEl) firstTurnAmountEl.textContent = `${fmt(firstTurnAmount)}`;
     if(priorityRuleText){
       priorityRuleText.textContent = maxAmountNow > 0
-        ? `ตอนนี้ยอดสูงสุดที่อยู่ในคิวคือ ${fmt(maxAmountNow)} • ถ้าโดเนท ${fmt(firstTurnAmount)} ขึ้นไป จะขึ้นระดับใหม่และได้สิทธิ์ตาแรกของรอบ`
-        : "ยังไม่มีคิว • โดเนท 10 บาทขึ้นไปจะเริ่มที่ระดับ 1";
+        ? `ตอนนี้ยอดสูงสุดที่อยู่ในคิวคือ ${fmt(maxAmountNow)} • ถ้าโดเนท ${fmt(firstTurnAmount)} ขึ้นไป จะขึ้นระดับใหม่และได้สิทธิ์ตาหน้า`
+        : "ยังไม่มีคิว • ตาหน้าจะเริ่มที่ 10 บาท";
     }
-    if(priorityExampleTitle) priorityExampleTitle.textContent = "ตัวอย่าง: 10 บาท → 15 บาท";
-    if(priorityExampleText) priorityExampleText.textContent = "ถ้าอยู่ระดับเดียวกัน (10–19.99) คนที่เข้าก่อนยังได้ก่อน • 20–29.99 = ระดับ 2 • 30–39.99 = ระดับ 3";
+    if(priorityExampleTitle) priorityExampleTitle.textContent = maxAmountNow > 0
+      ? `ยอดสูงสุดตอนนี้ ${fmt(maxAmountNow)} → ตาหน้าต้องโดเนท ${fmt(firstTurnAmount)} ขึ้นไป`
+      : "ตัวอย่าง: 10 บาท → 15 บาท";
+    if(priorityExampleText) priorityExampleText.textContent = maxAmountNow > 0
+      ? `ระบบจะขยับทีละ 10 บาทตามระดับคิว • ถ้ายอดสูงสุดเป็น ${fmt(maxAmountNow)} ตาหน้าคือ ${fmt(firstTurnAmount)}`
+      : "ถ้ายอดอยู่ระดับเดียวกัน คนที่เข้าก่อนยังได้ก่อน • ตาหน้าจะคำนวณจากยอดสูงสุดในคิว";
 
     q.innerHTML=d.rows.map((r,i)=>{
       const amount=Number(r.amount)||0;
