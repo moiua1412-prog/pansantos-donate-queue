@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap");
 *{box-sizing:border-box}
 :root{--bg:#060812;--panel:rgba(11,16,32,.76);--line:rgba(120,138,190,.20);--text:#f8f9ff;--muted:#8e99b3;--purple:#8a5cff;--violet:#a66cff;--cyan:#31d8ff;--green:#42ec9c;--yellow:#ffd166;--danger:#ff5d73}
 html{scroll-behavior:smooth}
@@ -137,3 +138,340 @@ button,.donate-btn,.donate-nav{touch-action:manipulation;-webkit-tap-highlight-c
   .fx-layer *,.hero::after,body::before,body::after{animation:none!important}
   *{scroll-behavior:auto!important}
 }
+
+
+/* =========================================================
+   PAN SANTOS — MODERN MOBILE + RGB UI
+   ========================================================= */
+
+/* Better Thai typography / spacing */
+body{
+  font-family:"Noto Sans Thai","Prompt",Inter,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button,input,select{font-family:inherit}
+.hero-copy p,.section-head p,.modal-box>p,.last-update{
+  letter-spacing:.05px;
+}
+
+/* RGB neon border for main buttons */
+.primary-btn,.donate-btn,.donate-nav,.nav-admin{
+  border:1px solid transparent !important;
+  background:
+    linear-gradient(100deg,#7757ff,#2fbaff) padding-box,
+    conic-gradient(from 0deg,#ff2d55,#ff9f0a,#ffe600,#30d158,#00d4ff,#5856d6,#ff2d55) border-box !important;
+  background-size:auto,200% 200% !important;
+  animation:rgbBorder 4s linear infinite;
+  box-shadow:0 8px 24px rgba(80,110,255,.18);
+}
+.donate-btn,.donate-nav{
+  background:
+    linear-gradient(100deg,#ff4f8b,#ff7b45) padding-box,
+    conic-gradient(from 0deg,#ff2d55,#ff9f0a,#ffe600,#30d158,#00d4ff,#5856d6,#ff2d55) border-box !important;
+}
+.nav-admin{
+  background:
+    linear-gradient(135deg,#12182a,#0b1020) padding-box,
+    conic-gradient(from 0deg,#ff2d55,#ff9f0a,#ffe600,#30d158,#00d4ff,#5856d6,#ff2d55) border-box !important;
+}
+@keyframes rgbBorder{to{background-position:0 0,200% 0}}
+.primary-btn:hover,.donate-btn:hover,.donate-nav:hover,.nav-admin:hover{
+  filter:brightness(1.08);
+}
+
+/* Login popup: smoother "เด้งขึ้น" animation */
+.modal{
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .22s ease,visibility .22s ease;
+}
+.modal:not(.hidden){
+  opacity:1;
+  visibility:visible;
+}
+.modal-box{
+  transform:translateY(18px) scale(.94);
+  opacity:0;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .2s ease;
+}
+.modal:not(.hidden) .modal-box{
+  transform:translateY(0) scale(1);
+  opacity:1;
+  animation:loginPop .38s cubic-bezier(.16,1,.3,1);
+}
+@keyframes loginPop{
+  0%{transform:translateY(24px) scale(.90)}
+  70%{transform:translateY(-3px) scale(1.015)}
+  100%{transform:translateY(0) scale(1)}
+}
+.modal-box{
+  border:1px solid transparent;
+  background:
+    linear-gradient(145deg,rgba(17,24,45,.94),rgba(8,13,27,.94)) padding-box,
+    conic-gradient(from 0deg,#ff2d55,#ff9f0a,#ffe600,#30d158,#00d4ff,#5856d6,#ff2d55) border-box;
+  animation-duration:4s;
+}
+.modal-box .primary-btn{
+  min-height:44px;
+}
+.password-wrap input{
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* Highest donor */
+.top-donor{
+  position:relative;
+}
+.top-donor td:first-child{
+  box-shadow:inset 3px 0 0 #ffd84d;
+}
+.crown{
+  display:inline-block;
+  margin-right:3px;
+  filter:drop-shadow(0 0 6px rgba(255,209,70,.75));
+  animation:crownFloat 1.8s ease-in-out infinite;
+}
+.top-donor-badge{
+  display:inline-flex;
+  align-items:center;
+  margin-left:7px;
+  padding:3px 7px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:800;
+  line-height:1;
+  color:#ffe58a;
+  background:rgba(255,209,70,.09);
+  border:1px solid rgba(255,209,70,.28);
+}
+@keyframes crownFloat{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-3px) rotate(3deg)}
+}
+
+/* Mobile: smaller, cleaner controls */
+@media(max-width:620px){
+  body{
+    font-size:14px;
+    line-height:1.55;
+  }
+  .topbar{
+    position:sticky;
+    top:5px;
+    padding:8px 9px;
+    border-radius:15px;
+  }
+  .brand h1{font-size:14px;line-height:1.25}
+  .brand p{font-size:7px;letter-spacing:1.2px}
+  .profile-avatar{width:37px;height:37px;border-radius:11px}
+  .topnav{gap:5px}
+  .nav-admin{
+    padding:7px 9px !important;
+    min-height:34px;
+    font-size:10px;
+    border-radius:10px;
+  }
+
+  .container{
+    width:calc(100% - 12px);
+    margin-top:14px;
+  }
+  .hero{
+    padding:18px 14px;
+    border-radius:19px;
+  }
+  .eyebrow{
+    font-size:9px;
+    letter-spacing:1.1px;
+    padding:6px 8px;
+  }
+  .hero h2{
+    font-size:clamp(28px,8vw,34px);
+    line-height:1.12;
+    letter-spacing:-.6px;
+    margin:13px 0 10px;
+  }
+  .hero-copy p{
+    font-size:12px;
+    line-height:1.75;
+    margin:0;
+  }
+  .hero-actions{
+    gap:8px;
+    margin-top:15px;
+  }
+  .primary-btn,.donate-btn{
+    width:auto !important;
+    min-height:38px;
+    padding:8px 12px !important;
+    font-size:11px;
+    line-height:1.35;
+    border-radius:10px;
+    box-shadow:0 7px 18px rgba(80,110,255,.14);
+  }
+  .donate-btn{
+    width:100% !important;
+  }
+  .last-update{
+    font-size:9px;
+    line-height:1.55;
+  }
+
+  .stats-grid{
+    gap:7px;
+    margin-top:10px;
+  }
+  .stat{
+    min-width:0;
+    padding:10px 8px;
+    gap:8px;
+  }
+  .stat-icon{
+    width:34px;height:34px;
+    border-radius:10px;
+    font-size:14px;
+  }
+  .stat span{font-size:9px}
+  .stat b{font-size:16px;line-height:1.25}
+  .stat small{font-size:7px}
+
+  .queue-panel{
+    margin-top:10px;
+    padding:12px;
+    border-radius:17px;
+  }
+  .section-kicker{font-size:8px;letter-spacing:1.3px}
+  .section-head h3{
+    font-size:18px;
+    line-height:1.35;
+    margin:4px 0;
+  }
+  .section-head p{
+    font-size:10px;
+    line-height:1.5;
+  }
+
+  /* Turn the queue table into compact cards on phones */
+  .table-shell{overflow:visible}
+  .table-shell table{
+    min-width:0 !important;
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 7px;
+  }
+  .table-shell thead{display:none}
+  .table-shell tbody tr{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 10px;
+    padding:9px 10px;
+    border:1px solid rgba(120,138,190,.15);
+    border-radius:13px;
+    background:rgba(8,13,27,.55);
+    box-shadow:0 7px 18px rgba(0,0,0,.16);
+  }
+  .table-shell tbody td{
+    display:flex;
+    align-items:center;
+    min-width:0;
+    padding:6px 0 !important;
+    border:0 !important;
+    font-size:11px;
+    line-height:1.45;
+  }
+  .table-shell tbody td::before{
+    content:attr(data-label);
+    display:inline-block;
+    min-width:42px;
+    margin-right:5px;
+    color:#697590;
+    font-size:8px;
+    font-weight:700;
+  }
+  .table-shell tbody td:nth-child(2){
+    grid-column:1 / -1;
+    border-bottom:1px solid rgba(255,255,255,.06) !important;
+    padding-bottom:8px !important;
+  }
+  .name-cell{
+    width:100%;
+    gap:7px;
+  }
+  .mini-avatar{
+    width:27px !important;
+    height:27px !important;
+    min-width:27px !important;
+    border-radius:8px !important;
+    font-size:10px !important;
+  }
+  .name-cell strong{font-size:11px}
+  .amount{font-size:11px !important}
+  .time-chip{
+    font-size:9px !important;
+    padding:4px 6px !important;
+  }
+  .status{
+    font-size:9px !important;
+    padding:4px 7px !important;
+  }
+  .queue-number{
+    width:25px !important;
+    height:25px !important;
+    font-size:10px !important;
+  }
+  .top-donor-badge{
+    font-size:7px;
+    padding:3px 5px;
+    margin-left:4px;
+  }
+  .crown{font-size:13px}
+
+  /* Compact login on small screens */
+  .modal{
+    padding:12px;
+  }
+  .modal-box{
+    width:min(360px,100%);
+    padding:21px 17px;
+    border-radius:18px;
+  }
+  .modal-badge{font-size:24px}
+  .modal-box h2{
+    font-size:20px;
+    line-height:1.3;
+    margin:6px 0 4px;
+  }
+  .modal-box>p{
+    font-size:10px;
+    line-height:1.6;
+    margin-bottom:14px;
+  }
+  .modal-box label{font-size:9px}
+  .password-wrap input{
+    padding:10px 40px 10px 11px;
+    font-size:12px;
+    border-radius:10px;
+  }
+  .full{
+    min-height:40px;
+    font-size:11px;
+    margin-top:9px;
+  }
+}
+
+@media(max-width:380px){
+  .topnav .nav-admin{
+    padding:6px 7px !important;
+    font-size:9px;
+  }
+  .hero h2{font-size:27px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat{padding:8px 6px}
+  .stat b{font-size:14px}
+  .stat-icon{width:30px;height:30px;font-size:12px}
+}
+
+/* Ensure the login dialog stays a real full-screen popup */
+.modal{position:fixed !important;inset:0 !important;z-index:1000 !important;}

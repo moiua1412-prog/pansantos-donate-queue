@@ -10,19 +10,29 @@ async function load(){
     const d=await fetch("/api/queue",{cache:"no-store"}).then(r=>r.json());
     count.textContent=d.rows.length;
     empty.classList.toggle("hidden", d.rows.length!==0);
-    q.innerHTML=d.rows.map((r,i)=>`
-      <tr>
-        <td><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
-        <td>
+
+    // หายอดโดเนทสูงสุด เพื่อแสดง 👑 ให้คนที่ยอดสูงสุด
+    const amounts=d.rows.map(r=>Number(r.amount)||0);
+    const maxAmount=amounts.length ? Math.max(...amounts) : 0;
+
+    q.innerHTML=d.rows.map((r,i)=>{
+      const amount=Number(r.amount)||0;
+      const isTopDonor=maxAmount>0 && amount===maxAmount;
+      return `
+      <tr class="${isTopDonor?"top-donor":""}">
+        <td data-label="คิว"><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
+        <td data-label="ชื่อ">
           <div class="name-cell">
             <div class="mini-avatar">${esc((r.name||"?").slice(0,1).toUpperCase())}</div>
-            <strong>${esc(r.name)}</strong>
+            <strong>${isTopDonor?'<span class="crown" title="ยอดโดเนทสูงสุด">👑</span> ':''}${esc(r.name)}</strong>
+            ${isTopDonor?'<span class="top-donor-badge">ยอดสูงสุด</span>':''}
           </div>
         </td>
-        <td><strong class="amount">${fmt(r.amount)}</strong></td>
-        <td><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
-        <td><span class="status ${statusClass(r.status)}"><i></i>${esc(r.status)}</span></td>
-      </tr>`).join("");
+        <td data-label="โดเนท"><strong class="amount">${fmt(amount)}</strong></td>
+        <td data-label="เพิ่มเมื่อ"><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
+        <td data-label="สถานะ"><span class="status ${statusClass(r.status)}"><i></i>${esc(r.status)}</span></td>
+      </tr>`;
+    }).join("");
     q.classList.remove("loading");
   }catch(e){
     q.innerHTML='<tr><td colspan="5" class="load-error">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชอีกครั้ง</td></tr>';
