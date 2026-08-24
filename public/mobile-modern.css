@@ -1,0 +1,155 @@
+/* ===== MOBILE MODERN UI =====
+   อัปโหลดไฟล์นี้ไว้ใน public/mobile-modern.css
+   แล้วเพิ่ม <link rel="stylesheet" href="/mobile-modern.css"> ใน index.html
+*/
+
+@media (max-width: 780px) {
+
+  body {
+    font-family: "Noto Sans Thai", Inter, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    letter-spacing: 0;
+  }
+
+  .container {
+    width: calc(100% - 24px);
+    margin: 0 auto;
+  }
+
+  /* Navbar */
+  .topbar {
+    top: 8px;
+    margin: 8px 12px;
+    padding: 9px 12px;
+    border-radius: 16px;
+    gap: 8px;
+  }
+
+  .topbar h1 {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .topbar p {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  /* ปุ่มทั้งหมด */
+  button,
+  .primary-btn,
+  .donate-btn,
+  .donate-nav,
+  .nav-link {
+    min-height: 40px;
+    height: auto;
+    padding: 8px 13px !important;
+    font-size: 13px !important;
+    line-height: 1.4;
+    border-radius: 11px !important;
+    white-space: nowrap;
+  }
+
+  .admin-btn {
+    padding: 8px 11px !important;
+    font-size: 12px !important;
+  }
+
+  .primary-btn {
+    width: auto;
+    min-width: 120px;
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* กล่องเนื้อหา */
+  .glass,
+  .queue-panel,
+  .admin-table,
+  .admin-form {
+    border-radius: 16px;
+    padding: 15px !important;
+  }
+
+  /* หัวข้อ */
+  h1 {
+    font-size: 24px;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
+  }
+
+  h2 {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  h3 {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 1.75;
+  }
+
+  /* สถิติ */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+  }
+
+  .stat {
+    padding: 13px !important;
+    border-radius: 14px;
+  }
+
+  .stat strong {
+    font-size: 20px;
+  }
+
+  /* ตาราง */
+  .table-shell {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 620px;
+  }
+
+  th,
+  td {
+    padding: 10px 9px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* ฟอร์ม */
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 11px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 10px;
+  }
+
+  .hero-copy {
+    max-width: 100%;
+  }
+
+  .hero-copy p {
+    line-height: 1.8;
+  }
+}
