@@ -15,11 +15,33 @@ async function load(){
     const amounts=d.rows.map(r=>Number(r.amount)||0);
     const maxAmount=amounts.length ? Math.max(...amounts) : 0;
 
+    // แสดงว่า "ตอนนี้ถึงคิวใคร" โดยยึดคิวที่มีสถานะกำลังทำเป็นหลัก
+    // ถ้ายังไม่มีคิวกำลังทำ จะใช้คิวรอคิวตัวแรกเป็นคิวถัดไป
+    const current = d.rows.find(r => r.status === "กำลังทำ") || d.rows.find(r => r.status === "รอคิว");
+    const currentName = document.getElementById("currentTurnName");
+    const currentInfo = document.getElementById("currentTurnInfo");
+    const currentBtn = document.getElementById("currentTurnBtn");
+    if (current) {
+      const currentIndex = d.rows.findIndex(r => r.id === current.id);
+      const stateText = current.status === "กำลังทำ" ? "กำลังทำอยู่ตอนนี้" : "คิวถัดไป";
+      currentName.textContent = `${current.name || "ไม่ระบุชื่อ"} • คิวที่ ${currentIndex + 1}`;
+      currentInfo.textContent = `${stateText} • ${fmt(Number(current.amount) || 0)}`;
+      currentBtn.disabled = false;
+      currentBtn.dataset.id = current.id;
+      currentBtn.textContent = current.status === "กำลังทำ" ? "ไปยังคิวนี้ ↓" : "ดูคิวถัดไป ↓";
+    } else {
+      currentName.textContent = "ยังไม่มีคิว";
+      currentInfo.textContent = "เมื่อมีโดเนทเข้ามา ระบบจะแสดงคิวที่ถึงทันที";
+      currentBtn.disabled = true;
+      currentBtn.removeAttribute("data-id");
+      currentBtn.textContent = "ยังไม่มีคิว";
+    }
+
     q.innerHTML=d.rows.map((r,i)=>{
       const amount=Number(r.amount)||0;
       const isTopDonor=maxAmount>0 && amount===maxAmount;
       return `
-      <tr class="${isTopDonor?"top-donor":""}">
+      <tr data-id="${esc(r.id)}" class="${isTopDonor?"top-donor":""}">
         <td data-label="คิว"><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
         <td data-label="ชื่อ">
           <div class="name-cell">
@@ -68,5 +90,12 @@ document.getElementById("login").onclick=async()=>{
   else document.getElementById("loginError").textContent="รหัสผ่านไม่ถูกต้อง";
 };
 document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("login").click()});
+document.getElementById("currentTurnBtn").onclick=()=>{
+  const id=document.getElementById("currentTurnBtn").dataset.id;
+  if(!id) return;
+  const row=[...document.querySelectorAll("#queue tr")].find(tr=>tr.dataset.id===id);
+  if(row) row.scrollIntoView({behavior:"smooth",block:"center"});
+};
+
 updateClock(); setInterval(updateClock,1000);
 load(); setInterval(load,10000);

@@ -626,3 +626,204 @@ button,input,select{font-family:inherit}
   .topnav .donate-nav{font-size:8px !important;padding:6px 6px !important}
   .topnav .nav-admin{font-size:8px !important;padding:6px 6px !important}
 }
+
+
+/* =========================================================
+   FINAL MOBILE DONATE + CURRENT TURN UI
+   ========================================================= */
+.donate-feature{
+  position:relative;
+  width:min(100%,430px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  margin:0;
+  z-index:8;
+}
+.donate-main{
+  position:relative !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:min(100%,390px) !important;
+  min-width:0 !important;
+  min-height:52px !important;
+  padding:12px 52px 12px 18px !important;
+  margin:0 auto !important;
+  border-radius:16px !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  line-height:1.35 !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+  isolation:isolate !important;
+  background:
+    linear-gradient(100deg,#ff4f8b,#ff7b45) padding-box !important,
+    conic-gradient(from 0deg,#ff2d55,#ff9f0a,#ffe600,#30d158,#00d4ff,#5856d6,#ff2d55) border-box !important;
+  border:2px solid transparent !important;
+  background-size:auto,200% 200% !important;
+  animation:donatePulse 1.8s ease-in-out infinite,rgbBorder 4s linear infinite !important;
+  box-shadow:0 10px 28px rgba(255,79,139,.20),0 0 24px rgba(0,212,255,.10) !important;
+}
+.donate-main::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  width:55% !important;
+  height:100% !important;
+  left:-70% !important;
+  top:0 !important;
+  border:0 !important;
+  padding:0 !important;
+  border-radius:inherit !important;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.30),transparent) !important;
+  transform:skewX(-20deg) !important;
+  animation:donateShine 2.8s ease-in-out infinite !important;
+  pointer-events:none !important;
+  z-index:2 !important;
+}
+.donate-main::after{content:none !important}
+.donate-main .donate-text{
+  position:relative !important;
+  z-index:4 !important;
+  text-align:center !important;
+}
+.tap-finger{
+  right:5px !important;
+  bottom:-24px !important;
+  z-index:10 !important;
+  font-size:29px !important;
+  pointer-events:none !important;
+}
+.tap-ring{
+  right:18px !important;
+  z-index:9 !important;
+}
+.donate-sub{
+  max-width:95%;
+  font-size:11px !important;
+  line-height:1.55 !important;
+  text-align:center;
+}
+@keyframes donateShine{
+  0%,35%{left:-70%;opacity:0}
+  45%{opacity:1}
+  65%,100%{left:120%;opacity:0}
+}
+
+/* Current queue / now serving */
+.current-turn{
+  margin-top:16px;
+  padding:16px 18px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  border:1px solid rgba(0,212,255,.20);
+  background:
+    linear-gradient(135deg,rgba(18,28,55,.92),rgba(8,14,29,.86)) padding-box,
+    conic-gradient(from 0deg,rgba(0,212,255,.7),rgba(138,92,255,.7),rgba(255,79,139,.7),rgba(48,209,88,.7),rgba(0,212,255,.7)) border-box;
+  box-shadow:0 14px 38px rgba(0,0,0,.20),0 0 30px rgba(0,199,255,.06);
+  position:relative;
+  overflow:hidden;
+}
+.current-turn::before{
+  content:"";
+  position:absolute;
+  inset:-100% 35%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+  transform:rotate(20deg);
+  animation:currentShine 4s linear infinite;
+  pointer-events:none;
+}
+.current-turn-icon{
+  width:46px;height:46px;min-width:46px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  background:rgba(0,212,255,.10);
+  border:1px solid rgba(0,212,255,.20);
+  font-size:22px;
+}
+.current-turn-copy{min-width:0;flex:1;position:relative;z-index:1}
+.current-turn-copy h3{
+  margin:3px 0 2px;
+  font-size:20px;
+  line-height:1.25;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.current-turn-copy p{
+  margin:0;
+  color:#8e99b3;
+  font-size:11px;
+}
+.current-turn-btn{
+  position:relative;
+  z-index:2;
+  border:1px solid transparent;
+  border-radius:11px;
+  padding:9px 12px;
+  color:#fff;
+  font:inherit;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  background:
+    linear-gradient(135deg,#111a31,#0b1020) padding-box,
+    conic-gradient(from 0deg,#ff2d55,#ff9f0a,#ffe600,#30d158,#00d4ff,#5856d6,#ff2d55) border-box;
+  background-size:auto,200% 200%;
+  animation:rgbBorder 4s linear infinite;
+  white-space:nowrap;
+}
+.current-turn-btn:disabled{opacity:.45;cursor:not-allowed;animation:none}
+.current-turn-btn:not(:disabled):active{transform:scale(.96)}
+@keyframes currentShine{
+  0%{transform:translateX(-120%) rotate(20deg)}
+  100%{transform:translateX(260%) rotate(20deg)}
+}
+
+@media(max-width:780px){
+  .hero-actions{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:11px;
+  }
+  .donate-feature{width:100%;max-width:360px}
+  .donate-main{
+    width:min(100%,340px) !important;
+    min-height:50px !important;
+    padding:11px 46px 11px 14px !important;
+    font-size:14px !important;
+    border-radius:15px !important;
+  }
+  .tap-finger{font-size:27px !important;right:3px !important;bottom:-22px !important}
+  .donate-sub{font-size:10px !important;max-width:100%}
+  .current-turn{
+    margin-top:10px;
+    padding:12px;
+    border-radius:15px;
+    gap:9px;
+  }
+  .current-turn-icon{width:38px;height:38px;min-width:38px;border-radius:11px;font-size:18px}
+  .current-turn-copy h3{font-size:15px}
+  .current-turn-copy p{font-size:9px}
+  .current-turn-btn{padding:8px 9px;font-size:9px;border-radius:9px}
+}
+@media(max-width:380px){
+  .donate-main{
+    width:min(100%,300px) !important;
+    min-height:46px !important;
+    font-size:12px !important;
+    padding:9px 42px 9px 11px !important;
+  }
+  .tap-finger{font-size:24px !important;bottom:-20px !important}
+  .current-turn-copy h3{font-size:13px}
+  .current-turn-copy p{font-size:8px}
+  .current-turn-btn{font-size:8px;padding:7px 8px}
+}
