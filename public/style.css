@@ -587,3 +587,42 @@ button,input,select{font-family:inherit}
 @media(prefers-reduced-motion:reduce){
   .donate-callout,.donate-main,.tap-finger,.tap-ring,.donate-callout-dot{animation:none !important}
 }
+
+/* FINAL MOBILE DONATE VISIBILITY FIX */
+@media (max-width: 620px){
+  .topbar{display:flex;align-items:center;gap:6px;overflow:visible}
+  .brand{min-width:0;flex:1;gap:7px}
+  .brand > div:last-child{min-width:0}
+  .brand h1,.brand p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topnav{display:flex;flex:0 0 auto;gap:4px;align-items:center}
+  .topnav a.active{display:none !important}
+  .topnav .donate-nav{
+    display:inline-flex !important;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    padding:7px 8px !important;
+    min-height:32px;
+    font-size:9px !important;
+    line-height:1.2;
+    border-radius:9px;
+  }
+  .topnav .nav-admin{
+    display:inline-flex !important;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    padding:7px 8px !important;
+    min-height:32px;
+    font-size:9px !important;
+    border-radius:9px;
+  }
+}
+@media (max-width: 380px){
+  .topbar{padding:7px 7px}
+  .profile-avatar{width:34px;height:34px}
+  .brand h1{font-size:12px}
+  .brand p{font-size:6px}
+  .topnav .donate-nav{font-size:8px !important;padding:6px 6px !important}
+  .topnav .nav-admin{font-size:8px !important;padding:6px 6px !important}
+}
