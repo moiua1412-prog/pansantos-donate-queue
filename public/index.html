@@ -101,8 +101,8 @@
     <div class="priority-head">
       <div>
         <span class="section-kicker">NEXT TURN CALCULATOR</span>
-        <h3>🎯 ยอดโดเนทสำหรับตาหน้า</h3>
-        <p id="priorityRuleText">กำลังคำนวณจากคิวปัจจุบัน...</p>
+        <h3>🎯 ตาหน้า • ต้องโดเท่าไหร่ถึงจะเล่น</h3>
+        <p id="priorityRuleText">กำลังคำนวณจากยอดโดเนทสูงสุดในคิว...</p>
       </div>
       <div class="first-turn-pill">
         <span>ตาหน้า</span>
@@ -115,10 +115,11 @@
       <div class="priority-rule"><b>+10 บาท</b><span>เพิ่มระดับคิวอีก 1 ขั้น</span></div>
     </div>
     <div class="priority-example">
+      <span class="priority-max-label">ยอดสูงสุดตอนนี้</span>
       <span class="priority-example-icon">⚡</span>
       <div>
-        <strong id="priorityExampleTitle">ตัวอย่าง: โด 40 บาท → ตาหน้า 50 บาท</strong>
-        <p id="priorityExampleText">ระบบจะจัดอันดับตามยอดโดเนทจากมากไปน้อย • ยอดสูงสุด + 10 บาท = ยอดที่ต้องโดเนทสำหรับตาหน้า</p>
+        <strong id="priorityExampleTitle">ตัวอย่าง: 10 บาท → 15 บาท</strong>
+        <p id="priorityExampleText">ถ้ายอดอยู่ระดับเดียวกัน คนที่เข้าก่อนยังได้ก่อน • ตาหน้าจะคำนวณจากยอดสูงสุดในคิว</p>
       </div>
     </div>
   </section>
@@ -135,7 +136,7 @@
 
     <div class="table-shell">
       <table>
-        <thead><tr><th>คิว</th><th>ชื่อ</th><th>โดเนท</th><th>เพิ่มเมื่อ</th><th>สถานะ</th></tr></thead>
+        <thead><tr><th>คิว</th><th>ชื่อ</th><th>โดเนท</th><th>ระดับคิว</th><th>เพิ่มเมื่อ</th><th>สถานะ</th></tr></thead>
         <tbody id="queue"></tbody>
       </table>
       <div id="empty" class="empty hidden">

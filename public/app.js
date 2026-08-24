@@ -11,57 +11,68 @@ async function load(){
     count.textContent=d.rows.length;
     empty.classList.toggle("hidden", d.rows.length!==0);
 
-    // หายอดโดเนทสูงสุด เพื่อแสดง 👑 ให้คนที่ยอดสูงสุด
-    const amounts=d.rows.map(r=>Number(r.amount)||0);
-    const maxAmount=amounts.length ? Math.max(...amounts) : 0;
+    // เรียงยอดโดเนทจากมาก -> น้อย และถ้ายอดเท่ากันให้คนที่เข้าก่อนอยู่ก่อน
+    const rows=[...d.rows].sort((a,b)=>{
+      const doneA=a.status==="เสร็จแล้ว"?1:0;
+      const doneB=b.status==="เสร็จแล้ว"?1:0;
+      if(doneA!==doneB) return doneA-doneB;
+      const amountDiff=(Number(b.amount)||0)-(Number(a.amount)||0);
+      if(amountDiff!==0) return amountDiff;
+      const ta=new Date(a.created_at).getTime(), tb=new Date(b.created_at).getTime();
+      if(Number.isFinite(ta)&&Number.isFinite(tb)&&ta!==tb) return ta-tb;
+      return Number(a.id)-Number(b.id);
+    });
 
-    // แสดงว่า "ตอนนี้ถึงคิวใคร" โดยยึดคิวที่มีสถานะกำลังทำเป็นหลัก
-    // ถ้ายังไม่มีคิวกำลังทำ จะใช้คิวรอคิวตัวแรกเป็นคิวถัดไป
-    const current = d.rows.find(r => r.status === "กำลังทำ") || d.rows.find(r => r.status === "รอคิว");
-    const currentName = document.getElementById("currentTurnName");
-    const currentInfo = document.getElementById("currentTurnInfo");
-    const currentBtn = document.getElementById("currentTurnBtn");
-    if (current) {
-      const currentIndex = d.rows.findIndex(r => r.id === current.id);
-      const stateText = current.status === "กำลังทำ" ? "กำลังทำอยู่ตอนนี้" : "คิวถัดไป";
-      const currentLevel = Math.max(1, Math.floor((Number(current.amount)||0)/10));
-      currentName.textContent = `${current.name || "ไม่ระบุชื่อ"} • คิวที่ ${currentIndex + 1}`;
-      currentInfo.textContent = `${stateText} • ${fmt(Number(current.amount) || 0)} • ระดับคิว ${currentLevel}`;
-      currentBtn.disabled = false;
-      currentBtn.dataset.id = current.id;
-      currentBtn.textContent = current.status === "กำลังทำ" ? "ไปยังคิวนี้ ↓" : "ดูคิวถัดไป ↓";
-    } else {
-      currentName.textContent = "ยังไม่มีคิว";
-      currentInfo.textContent = "เมื่อมีโดเนทเข้ามา ระบบจะแสดงคิวที่ถึงทันที";
-      currentBtn.disabled = true;
+    const active=rows.filter(r=>r.status!=="เสร็จแล้ว");
+    const maxAmount=active.length?Math.max(...active.map(r=>Number(r.amount)||0)):0;
+    const nextTurn=maxAmount>0?maxAmount+10:10;
+
+    // แสดง "ตอนนี้ถึงคิวใคร" = คนอันดับ 1 ที่ยังไม่เสร็จ
+    const current=active[0];
+    const currentName=document.getElementById("currentTurnName");
+    const currentInfo=document.getElementById("currentTurnInfo");
+    const currentBtn=document.getElementById("currentTurnBtn");
+    if(current){
+      const currentIndex=rows.findIndex(r=>r.id===current.id);
+      currentName.textContent=`${current.name||"ไม่ระบุชื่อ"} • อันดับ ${currentIndex+1}`;
+      currentInfo.textContent=`ยอดโดเนท ${fmt(Number(current.amount)||0)} • ${current.status==="กำลังทำ"?"กำลังทำอยู่ตอนนี้":"คิวสูงสุดตอนนี้"}`;
+      currentBtn.disabled=false;
+      currentBtn.dataset.id=current.id;
+      currentBtn.textContent="ไปยังคิวนี้ ↓";
+    }else{
+      currentName.textContent="ยังไม่มีคิว";
+      currentInfo.textContent="เมื่อมีคิว ระบบจะแสดงคนที่ยอดสูงสุดให้อัตโนมัติ";
+      currentBtn.disabled=true;
       currentBtn.removeAttribute("data-id");
-      currentBtn.textContent = "ยังไม่มีคิว";
+      currentBtn.textContent="ยังไม่มีคิว";
     }
 
-    const rules = d.queueRules || {};
-    const firstTurnAmount = Number(rules.firstTurnAmount) || 10;
-    const maxAmountNow = Number(rules.maxAmount) || 0;
-    const firstTurnAmountEl = document.getElementById("firstTurnAmount");
-    const priorityRuleText = document.getElementById("priorityRuleText");
-    const priorityExampleTitle = document.getElementById("priorityExampleTitle");
-    const priorityExampleText = document.getElementById("priorityExampleText");
+    const firstTurnAmountEl=document.getElementById("firstTurnAmount");
+    const priorityRuleText=document.getElementById("priorityRuleText");
+    const priorityExampleTitle=document.getElementById("priorityExampleTitle");
+    const priorityExampleText=document.getElementById("priorityExampleText");
 
-    if(firstTurnAmountEl) firstTurnAmountEl.textContent = `${fmt(firstTurnAmount)}`;
+    if(firstTurnAmountEl) firstTurnAmountEl.textContent=fmt(nextTurn);
     if(priorityRuleText){
-      priorityRuleText.textContent = maxAmountNow > 0
-        ? `ยอดโดเนทสูงสุดตอนนี้ ${fmt(maxAmountNow)} • ตาหน้าคือ ${fmt(firstTurnAmount)}`
-        : "ยังไม่มีคิว • ตาหน้าจะเริ่มที่ 10 บาท";
+      priorityRuleText.textContent=maxAmount>0
+        ? `ยอดสูงสุดตอนนี้ ${fmt(maxAmount)} → ตาหน้า ${fmt(nextTurn)}`
+        : "ยังไม่มีคิว → ตาหน้าเริ่มที่ 10 บาท";
     }
-    if(priorityExampleTitle) priorityExampleTitle.textContent = maxAmountNow > 0
-      ? `ยอดสูงสุด ${fmt(maxAmountNow)} → ตาหน้า ${fmt(firstTurnAmount)}`
-      : "ตัวอย่าง: โด 40 บาท → ตาหน้า 50 บาท";
-    if(priorityExampleText) priorityExampleText.textContent = maxAmountNow > 0
-      ? `ระบบจัดอันดับตามยอดโดเนทจากมากไปน้อย • ยอดสูงสุด + 10 บาท = ยอดที่ต้องโดเนทสำหรับตาหน้า`
-      : "เมื่อมีคิว ระบบจะคำนวณยอดสูงสุด + 10 บาทให้อัตโนมัติ";
+    if(priorityExampleTitle){
+      priorityExampleTitle.textContent=maxAmount>0
+        ? `โด ${fmt(maxAmount)} → ตาหน้า ${fmt(nextTurn)}`
+        : "ตัวอย่าง: โด 40 บาท → ตาหน้า 50 บาท";
+    }
+    if(priorityExampleText){
+      priorityExampleText.textContent=maxAmount>0
+        ? `คนที่โดเนทสูงสุดจะอยู่ที่อันดับ 1 • ต้องโดเพิ่มอีก 10 บาทเพื่อได้ตาหน้า`
+        : "ระบบจะคำนวณจากยอดโดเนทสูงสุดในคิวให้อัตโนมัติ";
+    }
 
-    q.innerHTML=d.rows.map((r,i)=>{
+    q.innerHTML=rows.map((r,i)=>{
       const amount=Number(r.amount)||0;
-      const isTopDonor=maxAmount>0 && amount===maxAmount;
+      const isTopDonor=maxAmount>0 && amount===maxAmount && r.status!=="เสร็จแล้ว";
+      const level=Math.max(1,Math.floor(amount/10));
       return `
       <tr data-id="${esc(r.id)}" class="${isTopDonor?"top-donor":""}">
         <td data-label="คิว"><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
@@ -69,22 +80,18 @@ async function load(){
           <div class="name-cell">
             <div class="mini-avatar">${esc((r.name||"?").slice(0,1).toUpperCase())}</div>
             <strong>${isTopDonor?'<span class="crown" title="ยอดโดเนทสูงสุด">👑</span> ':''}${esc(r.name)}</strong>
-            ${isTopDonor?'<span class="top-donor-badge">ยอดสูงสุด</span>':''}
+            ${isTopDonor?'<span class="top-donor-badge">อันดับ 1 • ยอดสูงสุด</span>':''}
           </div>
         </td>
-        <td data-label="โดเนท">
-          <div class="amount-wrap">
-            <strong class="amount">${fmt(amount)}</strong>
-            <span class="priority-level">LV.${Math.max(1,Math.floor(amount/10))}</span>
-          </div>
-        </td>
+        <td data-label="โดเนท"><strong class="amount">${fmt(amount)}</strong></td>
+        <td data-label="ระดับคิว"><span class="level-badge">LV.${level}</span></td>
         <td data-label="เพิ่มเมื่อ"><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
         <td data-label="สถานะ"><span class="status ${statusClass(r.status)}"><i></i>${esc(r.status)}</span></td>
       </tr>`;
     }).join("");
     q.classList.remove("loading");
   }catch(e){
-    q.innerHTML='<tr><td colspan="5" class="load-error">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชอีกครั้ง</td></tr>';
+    q.innerHTML='<tr><td colspan="6" class="load-error">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชอีกครั้ง</td></tr>';
   }
 }
 function fmt(n){return new Intl.NumberFormat("th-TH",{maximumFractionDigits:2}).format(n)+" บาท"}
