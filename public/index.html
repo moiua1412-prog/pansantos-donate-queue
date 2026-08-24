@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ปั้นซานโตส • Donate Queue</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="public-page">
+<div class="noise"></div>
+<div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+
+<header class="topbar glass">
+  <div class="brand">
+    <div class="avatar-wrap">
+      <img class="profile-avatar" src="/profile.png" alt="ปั้นซานโตส">
+      <span class="online-dot"></span>
+    </div>
+    <div>
+      <h1>ปั้นซานโตส</h1>
+      <p>DONATE QUEUE</p>
+    </div>
+  </div>
+  <nav class="topnav">
+    <a class="active" href="/">คิวโดเนท</a>
+    <a class="donate-nav" href="https://hiwdo.com/farm2729s" target="_blank" rel="noopener">💸 โดเนท - ขั้นต่ำ 5 บาท</a>
+    <button id="adminBtn" class="nav-admin">🔐 Admin</button>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="hero glass">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="pulse"></span> LIVE QUEUE <span class="slash">/</span> REAL-TIME</div>
+      <h2>จัดการคิวโดเนท<br><span>ให้ดูง่ายในที่เดียว</span></h2>
+      <p>ตรวจสอบลำดับคิว จำนวนเงิน และเวลาที่เพิ่มคิวเข้ามาได้ทันที พร้อมอัปเดตอัตโนมัติ</p>
+      <div class="hero-actions">
+        <button id="refresh" class="primary-btn">↻ รีเฟรชคิว</button>
+        <a class="donate-btn" href="https://hiwdo.com/farm2729s" target="_blank" rel="noopener">💸 โดเนท - ขั้นต่ำ 5 บาท</a>
+        <div class="last-update">โดเนทเป็นคลิปได้ • อัปเดตคิวอัตโนมัติทุก 10 วินาที</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="ring ring-1"></div><div class="ring ring-2"></div>
+      <div class="hero-avatar">
+        <img src="/profile.png" alt="ปั้นซานโตส">
+      </div>
+      <div class="float-card float-top">⚡ LIVE</div>
+      <div class="float-card float-bottom">🎧 PAN SANTOS</div>
+    </div>
+  </section>
+
+  <section class="stats-grid">
+    <div class="stat glass">
+      <div class="stat-icon purple">👥</div>
+      <div><span>คิวทั้งหมด</span><b id="count">0</b><small>QUEUE</small></div>
+    </div>
+    <div class="stat glass">
+      <div class="stat-icon cyan">◷</div>
+      <div><span>เวลาปัจจุบัน</span><b id="clock">--:--:--</b><small id="date">--</small></div>
+    </div>
+    <div class="stat glass">
+      <div class="stat-icon green">●</div>
+      <div><span>สถานะระบบ</span><b class="online-text">ออนไลน์</b><small>LIVE SYSTEM</small></div>
+    </div>
+  </section>
+
+  <section class="queue-panel glass">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">QUEUE LIST</div>
+        <h3>รายการคิวโดเนท</h3>
+        <p>ข้อมูลล่าสุดจากระบบ</p>
+      </div>
+      <div class="mini-badge"><span class="pulse"></span> LIVE</div>
+    </div>
+
+    <div class="table-shell">
+      <table>
+        <thead><tr><th>คิว</th><th>ชื่อ</th><th>โดเนท</th><th>เพิ่มเมื่อ</th><th>สถานะ</th></tr></thead>
+        <tbody id="queue"></tbody>
+      </table>
+      <div id="empty" class="empty hidden">
+        <div class="empty-icon">✨</div>
+        <h4>ยังไม่มีคิว</h4>
+        <p>ตอนนี้ยังไม่มีรายการโดเนทเข้ามา</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">♥ ปั้นซานโตส • ระบบเช็กคิวโดเนท</footer>
+</main>
+
+<div id="loginModal" class="modal hidden">
+ <div class="modal-box glass">
+  <button class="modal-close" data-close>×</button>
+  <div class="modal-badge">🔐</div>
+  <div class="section-kicker">PRIVATE AREA</div>
+  <h2>เข้าสู่ระบบ Admin</h2>
+  <p>เฉพาะผู้ดูแลระบบเท่านั้น</p>
+  <label>รหัสผ่าน</label>
+  <div class="password-wrap"><input id="password" type="password" placeholder="กรอกรหัสผ่าน"><span>●●●</span></div>
+  <button id="login" class="primary-btn full">เข้าสู่ระบบ</button>
+  <p id="loginError" class="error"></p>
+ </div>
+</div>
+<script src="/app.js"></script>
+</body>
+</html>

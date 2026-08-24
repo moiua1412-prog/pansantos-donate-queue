@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ปั้นซานโตส • Admin</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="admin-page">
+<div class="noise"></div><div class="orb orb-a"></div><div class="orb orb-c"></div>
+<header class="topbar glass">
+  <div class="brand">
+    <div class="avatar-wrap"><img class="profile-avatar" src="/profile.png" alt="ปั้นซานโตส"><span class="online-dot"></span></div>
+    <div><h1>ปั้นซานโตส</h1><p>ADMIN PANEL</p></div>
+  </div>
+  <div class="topnav">
+    <a class="nav-link" href="/">← หน้าคิว</a>
+    <button id="logout" class="nav-admin">ออกจากระบบ</button>
+  </div>
+</header>
+
+<main class="container admin-container">
+  <section class="admin-hero glass">
+    <div><div class="section-kicker">CONTROL CENTER</div><h2>จัดการคิวโดเนท</h2><p>เพิ่ม แก้ไข ลบ และเปลี่ยนสถานะคิวได้จากหน้านี้</p></div>
+    <div class="admin-clock"><span>เวลาปัจจุบัน</span><b id="adminClock">--:--:--</b></div>
+  </section>
+
+  <section class="admin-form glass">
+    <div class="section-head compact"><div><div class="section-kicker">NEW QUEUE</div><h3>เพิ่มคิวใหม่</h3><p>กรอกข้อมูลแล้วกดเพิ่มคิว</p></div></div>
+    <div class="form-grid">
+      <div class="field"><label>ชื่อ</label><input id="name" placeholder="เช่น ปั้น"></div>
+      <div class="field"><label>จำนวนเงิน (บาท)</label><input id="amount" type="number" min="0" step="0.01" placeholder="100"></div>
+      <div class="field"><label>สถานะ</label><select id="status"><option>รอคิว</option><option>กำลังทำ</option><option>เสร็จแล้ว</option></select></div>
+      <button id="add" class="primary-btn">＋ เพิ่มคิว</button>
+    </div>
+  </section>
+
+  <section class="admin-table glass">
+    <div class="section-head compact"><div><div class="section-kicker">QUEUE MANAGER</div><h3>จัดการคิวทั้งหมด</h3></div><div id="rowCount" class="mini-badge">0 รายการ</div></div>
+    <div class="table-shell">
+      <table>
+        <thead><tr><th>คิว</th><th>ชื่อ</th><th>โดเนท</th><th>เพิ่มเมื่อ</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script>
+async function api(url,opt={}){const r=await fetch(url,{headers:{"Content-Type":"application/json"},...opt});if(r.status===401){location.href="/";return null}const d=await r.json();if(!r.ok)throw new Error(d.error||"เกิดข้อผิดพลาด");return d}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function fmt(n){return new Intl.NumberFormat("th-TH",{maximumFractionDigits:2}).format(n)+" บาท"}
+function formatDateTime(v){const d=new Date(v);if(Number.isNaN(d.getTime()))return "-";return d.toLocaleString("th-TH",{hour:"2-digit",minute:"2-digit",hour12:false,day:"2-digit",month:"2-digit"})}
+function updateClock(){document.getElementById("adminClock").textContent=new Date().toLocaleTimeString("th-TH",{hour12:false})}
+function stat(s){return s==="เสร็จแล้ว"?"done":s==="กำลังทำ"?"doing":"waiting"}
+
+async function load(){
+ const d=await api("/api/queue");if(!d)return;
+ document.getElementById("rowCount").textContent=d.rows.length+" รายการ";
+ document.getElementById("rows").innerHTML=d.rows.map((r,i)=>`
+ <tr>
+   <td><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
+   <td><input class="edit-name" data-id="${r.id}" value="${esc(r.name)}"></td>
+   <td><input class="edit-amount" data-id="${r.id}" type="number" min="0" step="0.01" value="${r.amount}"></td>
+   <td><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
+   <td><select class="edit-status" data-id="${r.id}">${["รอคิว","กำลังทำ","เสร็จแล้ว"].map(s=>`<option ${s===r.status?"selected":""}>${s}</option>`).join("")}</select></td>
+   <td class="actions"><button class="save" data-id="${r.id}">บันทึก</button><button class="danger" data-id="${r.id}">ลบ</button></td>
+ </tr>`).join("");
+
+ document.querySelectorAll(".save").forEach(b=>b.onclick=async()=>{
+   const id=b.dataset.id;
+   await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({
+     name:document.querySelector('.edit-name[data-id="'+id+'"]').value,
+     amount:Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value),
+     status:document.querySelector('.edit-status[data-id="'+id+'"]').value
+   })}); await load();
+ });
+ document.querySelectorAll(".danger").forEach(b=>b.onclick=async()=>{
+   if(confirm("ลบคิวนี้ใช่ไหม?")){await api("/api/queue/"+b.dataset.id,{method:"DELETE"});await load()}
+ });
+}
+document.getElementById("add").onclick=async()=>{
+ try{
+   const nameEl=document.getElementById("name"), amountEl=document.getElementById("amount"), statusEl=document.getElementById("status");
+   await api("/api/queue",{method:"POST",body:JSON.stringify({name:nameEl.value.trim(),amount:Number(amountEl.value),status:statusEl.value})});
+   nameEl.value="";amountEl.value="";statusEl.value="รอคิว";await load();
+ }catch(e){alert(e.message)}
+}
+document.getElementById("logout").onclick=async()=>{await api("/api/logout",{method:"POST"});location.href="/"}
+updateClock();setInterval(updateClock,1000);load();
+</script>
+</body>
+</html>
