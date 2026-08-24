@@ -92,9 +92,35 @@
     <div class="current-turn-copy">
       <span class="section-kicker">NOW SERVING</span>
       <h3 id="currentTurnName">กำลังตรวจสอบคิว...</h3>
-      <p id="currentTurnInfo">ระบบจะบอกคิวที่กำลังทำอยู่ให้อัตโนมัติ</p>
+      <p id="currentTurnInfo">ระบบจะคำนวณคิวจากยอดโดเนทให้อัตโนมัติ</p>
     </div>
     <button id="currentTurnBtn" class="current-turn-btn" type="button">ดูคิวนี้ ↓</button>
+  </section>
+
+  <section class="priority-board glass" aria-live="polite">
+    <div class="priority-head">
+      <div>
+        <span class="section-kicker">FIRST TURN CALCULATOR</span>
+        <h3>💎 ยอดโดเนทที่ได้เล่นตาแรก</h3>
+        <p id="priorityRuleText">กำลังคำนวณจากคิวปัจจุบัน...</p>
+      </div>
+      <div class="first-turn-pill">
+        <span>ตาแรก</span>
+        <b id="firstTurnAmount">10 บาท</b>
+      </div>
+    </div>
+    <div class="priority-rule-row">
+      <div class="priority-rule"><b>10 บาท</b><span>จองคิว 1 ระดับ</span></div>
+      <div class="priority-rule"><b>20 บาท</b><span>ลัดคิว 1 ระดับ</span></div>
+      <div class="priority-rule"><b>+10 บาท</b><span>เพิ่มระดับคิวอีก 1 ขั้น</span></div>
+    </div>
+    <div class="priority-example">
+      <span class="priority-example-icon">⚡</span>
+      <div>
+        <strong id="priorityExampleTitle">ตัวอย่าง: 10 บาท → 15 บาท ยังอยู่ระดับเดียวกัน</strong>
+        <p id="priorityExampleText">ถ้าเข้าก่อน จะได้คิวก่อน • 20 บาทจะขยับขึ้นอีก 1 ระดับ • 30 บาทขึ้นไปขยับขึ้นอีกระดับ</p>
+      </div>
+    </div>
   </section>
 
   <section class="queue-panel glass">

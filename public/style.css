@@ -827,3 +827,187 @@ button,input,select{font-family:inherit}
   .current-turn-copy p{font-size:8px}
   .current-turn-btn{font-size:8px;padding:7px 8px}
 }
+
+
+/* =========================================================
+   DONATE PRIORITY / FIRST TURN CALCULATOR
+   ========================================================= */
+.priority-board{
+  margin-top:12px;
+  padding:18px;
+  border-radius:18px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid transparent;
+  background:
+    linear-gradient(135deg,rgba(13,22,43,.94),rgba(7,12,25,.92)) padding-box,
+    conic-gradient(from 0deg,rgba(255,45,85,.65),rgba(255,159,10,.65),rgba(255,230,0,.65),rgba(48,209,88,.65),rgba(0,212,255,.65),rgba(88,86,214,.65),rgba(255,45,85,.65)) border-box;
+  background-size:auto,200% 200%;
+  animation:priorityRgb 7s linear infinite;
+  box-shadow:0 14px 38px rgba(0,0,0,.2),0 0 30px rgba(138,92,255,.07);
+}
+.priority-board::after{
+  content:"";
+  position:absolute;
+  width:260px;height:260px;
+  right:-130px;top:-150px;
+  border-radius:50%;
+  background:rgba(0,212,255,.10);
+  filter:blur(55px);
+  pointer-events:none;
+}
+@keyframes priorityRgb{to{background-position:auto,200% 50%}}
+
+.priority-head{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+.priority-head h3{
+  margin:4px 0 4px;
+  font-size:19px;
+  line-height:1.3;
+}
+.priority-head p{
+  margin:0;
+  color:#8d98b1;
+  font-size:10px;
+  line-height:1.65;
+}
+.first-turn-pill{
+  flex:0 0 auto;
+  min-width:105px;
+  padding:10px 13px;
+  text-align:center;
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(255,79,139,.14),rgba(88,86,214,.16));
+  border:1px solid rgba(255,110,150,.28);
+  box-shadow:0 0 22px rgba(255,79,139,.09);
+}
+.first-turn-pill span{
+  display:block;
+  color:#aeb7cc;
+  font-size:9px;
+  letter-spacing:1px;
+}
+.first-turn-pill b{
+  display:block;
+  margin-top:2px;
+  color:#fff;
+  font-size:18px;
+}
+
+.priority-rule-row{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+.priority-rule{
+  padding:10px;
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.07);
+}
+.priority-rule b{
+  display:block;
+  color:#fff;
+  font-size:12px;
+}
+.priority-rule span{
+  display:block;
+  margin-top:3px;
+  color:#7f8ba5;
+  font-size:9px;
+  line-height:1.45;
+}
+.priority-example{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(0,212,255,.045);
+  border:1px solid rgba(0,212,255,.10);
+}
+.priority-example-icon{font-size:18px}
+.priority-example strong{
+  display:block;
+  color:#dce4f5;
+  font-size:10px;
+  line-height:1.45;
+}
+.priority-example p{
+  margin:3px 0 0;
+  color:#7f8ba5;
+  font-size:9px;
+  line-height:1.5;
+}
+.amount-wrap{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.priority-level{
+  display:inline-flex;
+  align-items:center;
+  padding:3px 6px;
+  border-radius:999px;
+  color:#9fe9ff;
+  background:rgba(0,212,255,.07);
+  border:1px solid rgba(0,212,255,.16);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+@media(max-width:620px){
+  .priority-board{
+    margin-top:10px;
+    padding:13px;
+    border-radius:16px;
+  }
+  .priority-head{
+    gap:8px;
+  }
+  .priority-head h3{
+    font-size:15px;
+  }
+  .priority-head p{
+    font-size:8px;
+    line-height:1.55;
+  }
+  .first-turn-pill{
+    min-width:82px;
+    padding:8px 7px;
+    border-radius:11px;
+  }
+  .first-turn-pill span{font-size:7px}
+  .first-turn-pill b{font-size:14px}
+  .priority-rule-row{gap:5px;margin-top:9px}
+  .priority-rule{padding:7px 6px;border-radius:9px}
+  .priority-rule b{font-size:10px}
+  .priority-rule span{font-size:7px}
+  .priority-example{padding:8px 9px;margin-top:7px;gap:6px}
+  .priority-example-icon{font-size:14px}
+  .priority-example strong{font-size:8px}
+  .priority-example p{font-size:7px}
+  .priority-level{font-size:7px;padding:2px 5px}
+}
+@media(max-width:380px){
+  .priority-head h3{font-size:13px}
+  .priority-head p{font-size:7px}
+  .first-turn-pill{min-width:72px}
+  .first-turn-pill b{font-size:12px}
+  .priority-rule b{font-size:9px}
+  .priority-rule span{font-size:6.5px}
+}

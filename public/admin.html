@@ -35,6 +35,25 @@
     </div>
   </section>
 
+  <section class="priority-board glass">
+    <div class="priority-head">
+      <div>
+        <span class="section-kicker">QUEUE PRIORITY</span>
+        <h3>⚡ กติกาลัดคิว</h3>
+        <p>ทุกยอดครบ 10 บาท = เพิ่มระดับคิว 1 ขั้น • ถ้าระดับเท่ากัน คนที่เข้าก่อนยังได้ก่อน</p>
+      </div>
+      <div class="first-turn-pill">
+        <span>ตัวอย่าง</span>
+        <b>10 → 20 → 30</b>
+      </div>
+    </div>
+    <div class="priority-rule-row">
+      <div class="priority-rule"><b>10–19.99</b><span>ระดับ 1 • จองคิวปกติ</span></div>
+      <div class="priority-rule"><b>20–29.99</b><span>ระดับ 2 • ลัดขึ้น 1 ระดับ</span></div>
+      <div class="priority-rule"><b>30–39.99</b><span>ระดับ 3 • ลัดขึ้น 2 ระดับ</span></div>
+    </div>
+  </section>
+
   <section class="admin-table glass">
     <div class="section-head compact"><div><div class="section-kicker">QUEUE MANAGER</div><h3>จัดการคิวทั้งหมด</h3></div><div id="rowCount" class="mini-badge">0 รายการ</div></div>
     <div class="table-shell">
@@ -60,7 +79,12 @@ async function load(){
  <tr>
    <td><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
    <td><input class="edit-name" data-id="${r.id}" value="${esc(r.name)}"></td>
-   <td><input class="edit-amount" data-id="${r.id}" type="number" min="0" step="0.01" value="${r.amount}"></td>
+   <td>
+     <div class="amount-wrap">
+       <input class="edit-amount" data-id="${r.id}" type="number" min="0" step="0.01" value="${r.amount}">
+       <span class="priority-level">LV.${Math.max(1,Math.floor((Number(r.amount)||0)/10))}</span>
+     </div>
+   </td>
    <td><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
    <td><select class="edit-status" data-id="${r.id}">${["รอคิว","กำลังทำ","เสร็จแล้ว"].map(s=>`<option ${s===r.status?"selected":""}>${s}</option>`).join("")}</select></td>
    <td class="actions"><button class="save" data-id="${r.id}">บันทึก</button><button class="danger" data-id="${r.id}">ลบ</button></td>

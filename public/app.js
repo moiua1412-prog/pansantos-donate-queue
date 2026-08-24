@@ -24,8 +24,9 @@ async function load(){
     if (current) {
       const currentIndex = d.rows.findIndex(r => r.id === current.id);
       const stateText = current.status === "กำลังทำ" ? "กำลังทำอยู่ตอนนี้" : "คิวถัดไป";
+      const currentLevel = Math.max(1, Math.floor((Number(current.amount)||0)/10));
       currentName.textContent = `${current.name || "ไม่ระบุชื่อ"} • คิวที่ ${currentIndex + 1}`;
-      currentInfo.textContent = `${stateText} • ${fmt(Number(current.amount) || 0)}`;
+      currentInfo.textContent = `${stateText} • ${fmt(Number(current.amount) || 0)} • ระดับคิว ${currentLevel}`;
       currentBtn.disabled = false;
       currentBtn.dataset.id = current.id;
       currentBtn.textContent = current.status === "กำลังทำ" ? "ไปยังคิวนี้ ↓" : "ดูคิวถัดไป ↓";
@@ -36,6 +37,23 @@ async function load(){
       currentBtn.removeAttribute("data-id");
       currentBtn.textContent = "ยังไม่มีคิว";
     }
+
+    const rules = d.queueRules || {};
+    const firstTurnAmount = Number(rules.firstTurnAmount) || 10;
+    const maxAmountNow = Number(rules.maxAmount) || 0;
+    const firstTurnAmountEl = document.getElementById("firstTurnAmount");
+    const priorityRuleText = document.getElementById("priorityRuleText");
+    const priorityExampleTitle = document.getElementById("priorityExampleTitle");
+    const priorityExampleText = document.getElementById("priorityExampleText");
+
+    if(firstTurnAmountEl) firstTurnAmountEl.textContent = `${fmt(firstTurnAmount)}`;
+    if(priorityRuleText){
+      priorityRuleText.textContent = maxAmountNow > 0
+        ? `ตอนนี้ยอดสูงสุดที่อยู่ในคิวคือ ${fmt(maxAmountNow)} • ถ้าโดเนท ${fmt(firstTurnAmount)} ขึ้นไป จะขึ้นระดับใหม่และได้สิทธิ์ตาแรกของรอบ`
+        : "ยังไม่มีคิว • โดเนท 10 บาทขึ้นไปจะเริ่มที่ระดับ 1";
+    }
+    if(priorityExampleTitle) priorityExampleTitle.textContent = "ตัวอย่าง: 10 บาท → 15 บาท";
+    if(priorityExampleText) priorityExampleText.textContent = "ถ้าอยู่ระดับเดียวกัน (10–19.99) คนที่เข้าก่อนยังได้ก่อน • 20–29.99 = ระดับ 2 • 30–39.99 = ระดับ 3";
 
     q.innerHTML=d.rows.map((r,i)=>{
       const amount=Number(r.amount)||0;
@@ -50,7 +68,12 @@ async function load(){
             ${isTopDonor?'<span class="top-donor-badge">ยอดสูงสุด</span>':''}
           </div>
         </td>
-        <td data-label="โดเนท"><strong class="amount">${fmt(amount)}</strong></td>
+        <td data-label="โดเนท">
+          <div class="amount-wrap">
+            <strong class="amount">${fmt(amount)}</strong>
+            <span class="priority-level">LV.${Math.max(1,Math.floor(amount/10))}</span>
+          </div>
+        </td>
         <td data-label="เพิ่มเมื่อ"><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
         <td data-label="สถานะ"><span class="status ${statusClass(r.status)}"><i></i>${esc(r.status)}</span></td>
       </tr>`;
