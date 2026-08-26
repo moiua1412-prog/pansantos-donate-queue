@@ -1189,3 +1189,15 @@ button,input,select{font-family:inherit}
 @media(max-width:780px){
   .uid-chip{font-size:8px;padding:4px 6px}
 }
+
+.uid-chip{
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:10px !important;
+  color:#d5c9ff !important;
+  background:rgba(138,92,255,.12) !important;
+  border:1px solid rgba(138,92,255,.28) !important;
+}
+.edit-uid:focus{
+  border-color:#8a5cff !important;
+  box-shadow:0 0 0 3px rgba(138,92,255,.12);
+}

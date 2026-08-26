@@ -29,7 +29,7 @@
     <div class="section-head compact"><div><div class="section-kicker">NEW QUEUE</div><h3>เพิ่มคิวใหม่</h3><p>จองคิวขั้นต่ำ 20 บาท • ตาหน้าเริ่มที่ 20 บาท • ลัดคิวทีละ 5 บาท</p></div></div>
     <div class="form-grid">
       <div class="field"><label>ชื่อ</label><input id="name" placeholder="เช่น ปั้น"></div>
-      <div class="field"><label>UID</label><input id="uid" placeholder="เช่น 1234567890" inputmode="numeric"></div>
+      <div class="field"><label>UID ของผู้โดเนท</label><input id="uid" placeholder="กรอก UID ตรงนี้" inputmode="numeric" autocomplete="off"></div>
       <div class="field"><label>จำนวนเงิน (บาท)</label><input id="amount" type="number" min="20" step="5" placeholder="100"></div>
       <div class="field"><label>สถานะ</label><select id="status"><option>รอคิว</option><option>กำลังทำ</option><option>เสร็จแล้ว</option><option>ตัดสิทธิ์</option></select></div>
       <button id="add" class="primary-btn">＋ เพิ่มคิว</button>
@@ -95,11 +95,14 @@ async function load(){
  document.querySelectorAll(".save").forEach(b=>b.onclick=async()=>{
    const id=b.dataset.id;
    await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({
-     name:document.querySelector('.edit-name[data-id="'+id+'"]').value,
+     name:document.querySelector('.edit-name[data-id="'+id+'"]').value.trim(),
      uid:document.querySelector('.edit-uid[data-id="'+id+'"]').value.trim(),
      amount:Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value),
      status:document.querySelector('.edit-status[data-id="'+id+'"]').value
-   })}); await load();
+   })});
+   b.textContent="บันทึกแล้ว ✓";
+   setTimeout(()=>b.textContent="บันทึก",1000);
+   await load();
  });
  document.querySelectorAll(".skip").forEach(b=>b.onclick=async()=>{
    if(confirm("คนนี้โดเนทแล้วแต่ไม่มาใช่ไหม? ระบบจะตัดสิทธิ์และไม่นับเป็นคิวที่กำลังรอ")){
