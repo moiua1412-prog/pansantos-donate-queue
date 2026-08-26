@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ปั้นซานโตส • Admin</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="admin-page">
+<div class="noise"></div><div class="orb orb-a"></div><div class="orb orb-c"></div>
+<header class="topbar glass">
+  <div class="brand">
+    <div class="avatar-wrap"><img class="profile-avatar" src="/profile.png" alt="ปั้นซานโตส"><span class="online-dot"></span></div>
+    <div><h1>ปั้นซานโตส</h1><p>ADMIN PANEL</p></div>
+  </div>
+  <div class="topnav">
+    <a class="nav-link" href="/">← หน้าคิว</a>
+    <button id="logout" class="nav-admin">ออกจากระบบ</button>
+  </div>
+</header>
+
+<main class="container admin-container">
+  <section class="admin-hero glass">
+    <div><div class="section-kicker">CONTROL CENTER</div><h2>จัดการคิวโดเนท</h2><p>เพิ่ม แก้ไข ลบ และเปลี่ยนสถานะคิวได้จากหน้านี้</p></div>
+    <div class="admin-clock"><span>เวลาปัจจุบัน</span><b id="adminClock">--:--:--</b></div>
+  </section>
+
+  <section class="admin-form glass">
+    <div class="section-head compact"><div><div class="section-kicker">NEW QUEUE</div><h3>เพิ่มคิวใหม่</h3><p>จองคิวขั้นต่ำ 20 บาท • ตาหน้าเริ่มที่ 20 บาท • ลัดคิวทีละ 5 บาท</p></div></div>
+    <div class="form-grid">
+      <div class="field"><label>ชื่อ</label><input id="name" placeholder="เช่น ปั้น"></div>
+      <div class="field"><label>UID ของผู้โดเนท</label><input id="uid" placeholder="กรอก UID ตรงนี้" inputmode="numeric" autocomplete="off"></div>
+      <div class="field"><label>จำนวนเงิน (บาท)</label><input id="amount" type="number" min="20" step="5" placeholder="100"></div>
+      <div class="field"><label>สถานะ</label><select id="status"><option>รอคิว</option><option>กำลังทำ</option><option>เสร็จแล้ว</option><option>ตัดสิทธิ์</option></select></div>
+      <button id="add" class="primary-btn">＋ เพิ่มคิว</button>
+    </div>
+  </section>
+
+  <section class="priority-board glass">
+    <div class="priority-head">
+      <div>
+        <span class="section-kicker">QUEUE PRIORITY</span>
+        <h3>⚡ กติกาลัดคิว</h3>
+        <p>ทุกยอดครบ 5 บาท = เพิ่มระดับคิว 1 ขั้น • ถ้าระดับเท่ากัน คนที่เข้าก่อนยังได้ก่อน</p>
+      </div>
+      <div class="first-turn-pill">
+        <span>ตัวอย่าง</span>
+        <b>5 → 10 → 15 → 20 → 25</b>
+      </div>
+    </div>
+    <div class="priority-rule-row">
+      <div class="priority-rule"><b>5–9.99</b><span>ระดับ 1 • จองคิวปกติ</span></div>
+      <div class="priority-rule"><b>20–29.99</b><span>ระดับ 2 • ลัดขึ้น 1 ระดับ</span></div>
+      <div class="priority-rule"><b>30–39.99</b><span>ระดับ 3 • ลัดขึ้น 2 ระดับ</span></div>
+    </div>
+  </section>
+
+  <div id="saveNotice" class="save-notice" aria-live="polite"></div>
+  <section class="admin-table glass">
+    <div class="section-head compact"><div><div class="section-kicker">QUEUE MANAGER</div><h3>จัดการคิวทั้งหมด</h3></div><div id="rowCount" class="mini-badge">0 รายการ</div></div>
+    <div class="table-shell">
+      <table>
+        <thead><tr><th>คิว</th><th>ชื่อ</th><th>UID</th><th>โดเนท</th><th>เพิ่มเมื่อ</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script>
+async function api(url,opt={}){
+  const r=await fetch(url,{headers:{"Content-Type":"application/json","Accept":"application/json",...(opt.headers||{})},...opt});
+  if(r.status===401){location.href="/";return null}
+  const text=await r.text();
+  let d;
+  try{ d=text ? JSON.parse(text) : {}; }
+  catch(_){ throw new Error(`เซิร์ฟเวอร์ตอบกลับไม่ใช่ JSON (${r.status})`); }
+  if(!r.ok) throw new Error(d.error||`เกิดข้อผิดพลาด (${r.status})`);
+  return d;
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function fmt(n){return new Intl.NumberFormat("th-TH",{maximumFractionDigits:2}).format(n)+" บาท"}
+function formatDateTime(v){const d=new Date(v);if(Number.isNaN(d.getTime()))return "-";return d.toLocaleString("th-TH",{hour:"2-digit",minute:"2-digit",hour12:false,day:"2-digit",month:"2-digit"})}
+function updateClock(){document.getElementById("adminClock").textContent=new Date().toLocaleTimeString("th-TH",{hour12:false})}
+function stat(s){return s==="เสร็จแล้ว"?"done":s==="กำลังทำ"?"doing":"waiting"}
+
+async function load(){
+ const d=await api("/api/queue");if(!d)return;
+ document.getElementById("rowCount").textContent=d.rows.length+" รายการ";
+ document.getElementById("rows").innerHTML=d.rows.map((r,i)=>`
+ <tr>
+   <td><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
+   <td><input class="edit-name" data-id="${r.id}" value="${esc(r.name)}"></td>
+   <td>
+     <div class="uid-edit-wrap">
+       <input class="edit-uid" data-id="${r.id}" value="${esc(r.uid||"")}" placeholder="UID">
+       <button class="save-uid" data-id="${r.id}" type="button">บันทึก UID</button>
+     </div>
+   </td>
+   <td>
+     <div class="amount-wrap">
+       <input class="edit-amount" data-id="${r.id}" type="number" min="5" step="5" value="${r.amount}">
+       <span class="priority-level">LV.${Math.max(1,Math.floor((Number(r.amount)||0)/5))}</span>
+     </div>
+   </td>
+   <td><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
+   <td><select class="edit-status" data-id="${r.id}">${["รอคิว","กำลังทำ","เสร็จแล้ว","ตัดสิทธิ์"].map(s=>`<option ${s===r.status?"selected":""}>${s}</option>`).join("")}</select></td>
+   <td class="actions"><button class="save" data-id="${r.id}">บันทึก</button><button class="skip" data-id="${r.id}">ไม่มา / ตัดสิทธิ์</button><button class="danger" data-id="${r.id}">ลบ</button></td>
+ </tr>`).join("");
+
+ document.querySelectorAll(".save-uid").forEach(b=>b.onclick=async()=>{
+   const id=b.dataset.id;
+   const input=document.querySelector('.edit-uid[data-id="'+id+'"]');
+   const uid=input.value.trim();
+   if(!uid){alert("กรุณากรอก UID"); input.focus(); return;}
+   try{
+     const rowName=document.querySelector('.edit-name[data-id="'+id+'"]').value.trim();
+     const rowAmount=Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value);
+     const rowStatus=document.querySelector('.edit-status[data-id="'+id+'"]').value;
+     await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({
+       name:rowName,uid,amount:rowAmount,status:rowStatus
+     })});
+     b.textContent="บันทึกแล้ว ✓";
+     const notice=document.getElementById("saveNotice");
+     if(notice){notice.textContent="✅ บันทึก UID เรียบร้อยแล้ว";notice.classList.add("show");setTimeout(()=>notice.classList.remove("show"),1800)}
+     setTimeout(()=>b.textContent="บันทึก UID",1200);
+     await load();
+   }catch(e){alert(e.message)}
+ });
+ document.querySelectorAll(".save").forEach(b=>b.onclick=async()=>{
+   const id=b.dataset.id;
+   await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({
+     name:document.querySelector('.edit-name[data-id="'+id+'"]').value.trim(),
+     uid:document.querySelector('.edit-uid[data-id="'+id+'"]').value.trim(),
+     amount:Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value),
+     status:document.querySelector('.edit-status[data-id="'+id+'"]').value
+   })});
+   b.textContent="บันทึกแล้ว ✓";
+   setTimeout(()=>b.textContent="บันทึก",1000);
+   await load();
+ });
+ document.querySelectorAll(".skip").forEach(b=>b.onclick=async()=>{
+   if(confirm("คนนี้โดเนทแล้วแต่ไม่มาใช่ไหม? ระบบจะตัดสิทธิ์และไม่นับเป็นคิวที่กำลังรอ")){
+     const id=b.dataset.id;
+     const rowName=document.querySelector('.edit-name[data-id="'+id+'"]').value;
+     const rowUid=document.querySelector('.edit-uid[data-id="'+id+'"]').value.trim();
+     const rowAmount=Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value);
+     await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({name:rowName,uid:rowUid,amount:rowAmount,status:"ตัดสิทธิ์"})});
+     await load();
+   }
+ });
+document.querySelectorAll(".danger").forEach(b=>b.onclick=async()=>{
+   if(confirm("ลบคิวนี้ใช่ไหม?")){await api("/api/queue/"+b.dataset.id,{method:"DELETE"});await load()}
+ });
+}
+document.getElementById("add").onclick=async()=>{
+ try{
+   const nameEl=document.getElementById("name"), uidEl=document.getElementById("uid"), amountEl=document.getElementById("amount"), statusEl=document.getElementById("status");
+   await api("/api/queue",{method:"POST",body:JSON.stringify({name:nameEl.value.trim(),uid:uidEl.value.trim(),amount:Number(amountEl.value),status:statusEl.value})});
+   nameEl.value="";uidEl.value="";amountEl.value="";statusEl.value="รอคิว";await load();
+ }catch(e){alert(e.message)}
+}
+document.getElementById("logout").onclick=async()=>{await api("/api/logout",{method:"POST"});location.href="/"}
+updateClock();setInterval(updateClock,1000);load();
+</script>
+</body>
+</html>
