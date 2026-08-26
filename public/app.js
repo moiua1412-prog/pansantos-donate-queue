@@ -23,9 +23,9 @@ async function load(){
       return Number(a.id)-Number(b.id);
     });
 
-    const active=rows.filter(r=>r.status!=="เสร็จแล้ว");
+    const active=rows.filter(r=>r.status!=="เสร็จแล้ว" && r.status!=="ตัดสิทธิ์");
     const maxAmount=active.length?Math.max(...active.map(r=>Number(r.amount)||0)):0;
-    const nextTurn=maxAmount>0?Math.max(20,maxAmount+5):20;
+    const nextTurn=maxAmount>0?Math.max(5,maxAmount+5):5;
 
     // แสดง "ตอนนี้ถึงคิวใคร" = คนอันดับ 1 ที่ยังไม่เสร็จ
     const current=active[0];
@@ -56,12 +56,12 @@ async function load(){
     if(priorityRuleText){
       priorityRuleText.textContent=maxAmount>0
         ? `ยอดสูงสุดตอนนี้ ${fmt(maxAmount)} → ตาหน้า ${fmt(nextTurn)}`
-        : "ยังไม่มีคิว → ตาหน้าเริ่มที่ 20 บาท";
+        : "ยังไม่มีคิว → ตาหน้าเริ่มที่ 5 บาท";
     }
     if(priorityExampleTitle){
       priorityExampleTitle.textContent=maxAmount>0
         ? `โด ${fmt(maxAmount)} → ตาหน้า ${fmt(nextTurn)}`
-        : "ตัวอย่าง: โด 20 บาท → ตาหน้า 25 บาท";
+        : "ตัวอย่าง: โด 5 บาท → ตาหน้า 10 บาท";
     }
     if(priorityExampleText){
       priorityExampleText.textContent=maxAmount>0
@@ -72,7 +72,7 @@ async function load(){
     q.innerHTML=rows.map((r,i)=>{
       const amount=Number(r.amount)||0;
       const isTopDonor=maxAmount>0 && amount===maxAmount && r.status!=="เสร็จแล้ว";
-      const level=amount>=20?Math.floor((amount-20)/5)+1:0;
+      const level=amount>=5?Math.floor((amount-5)/5)+1:0;
       return `
       <tr data-id="${esc(r.id)}" class="${isTopDonor?"top-donor":""}">
         <td data-label="คิว"><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
@@ -95,7 +95,7 @@ async function load(){
   }
 }
 function fmt(n){return new Intl.NumberFormat("th-TH",{maximumFractionDigits:2}).format(n)+" บาท"}
-function statusClass(s){return s==="เสร็จแล้ว"?"done":s==="กำลังทำ"?"doing":"waiting"}
+function statusClass(s){return s==="เสร็จแล้ว"?"done":s==="ตัดสิทธิ์"?"disqualified":s==="กำลังทำ"?"doing":"waiting"}
 function formatDateTime(v){
   const d=new Date(v);
   if(Number.isNaN(d.getTime())) return "-";

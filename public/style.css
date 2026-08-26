@@ -1142,3 +1142,24 @@ button,input,select{font-family:inherit}
 }
 
 /* Minimum donation rule: 20 THB, lane cut step: 5 THB */
+
+.status.disqualified{
+  color:#ff8699;
+  background:#ff5d7310;
+  border-color:#ff5d7330;
+  text-decoration:line-through;
+}
+.status.disqualified i{background:#ff5d73}
+.skip{
+  color:#ffd166;
+  background:#ffd1660c;
+  border:1px solid #ffd16625;
+  border-radius:10px;
+  padding:9px 11px;
+  font-weight:700;
+  cursor:pointer;
+}
+.skip:hover{background:#ffd16618}
+@media(max-width:780px){
+  .skip{font-size:9px;padding:7px 8px}
+}
