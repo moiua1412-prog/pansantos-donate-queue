@@ -1239,3 +1239,11 @@ button,input,select{font-family:inherit}
   transition:.2s ease;
 }
 .save-notice.show{opacity:1;transform:translate(-50%,0)}
+
+/* Clan history integrated section */
+.clan-history-section{position:relative;z-index:2}
+.clan-history-section .history{touch-action:pan-y}
+@media(max-width:520px){
+  .clan-history-section .wrap{width:100%;margin:0}
+  .clan-history-section .section-head h1{font-size:28px}
+}
