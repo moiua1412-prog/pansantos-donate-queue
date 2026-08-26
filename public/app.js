@@ -56,12 +56,12 @@ async function load(){
     if(priorityRuleText){
       priorityRuleText.textContent=maxAmount>0
         ? `ยอดสูงสุดตอนนี้ ${fmt(maxAmount)} → ตาหน้า ${fmt(nextTurn)}`
-        : "ยังไม่มีคิว → ตาหน้าเริ่มที่ 5 บาท";
+        : "ยังไม่มีคิว → ตาหน้าเริ่มที่ 20 บาท";
     }
     if(priorityExampleTitle){
       priorityExampleTitle.textContent=maxAmount>0
         ? `โด ${fmt(maxAmount)} → ตาหน้า ${fmt(nextTurn)}`
-        : "ตัวอย่าง: โด 5 บาท → ตาหน้า 10 บาท";
+        : "ตัวอย่าง: ยอดจองคิว 20 บาท → ตาหน้า 25 บาท";
     }
     if(priorityExampleText){
       priorityExampleText.textContent=maxAmount>0
