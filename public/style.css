@@ -1201,3 +1201,21 @@ button,input,select{font-family:inherit}
   border-color:#8a5cff !important;
   box-shadow:0 0 0 3px rgba(138,92,255,.12);
 }
+
+.uid-edit-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:145px;
+}
+.save-uid{
+  border:1px solid rgba(0,212,255,.25);
+  border-radius:8px;
+  padding:6px 8px;
+  color:#7be9ff;
+  background:rgba(0,212,255,.08);
+  font-size:9px;
+  font-weight:800;
+  cursor:pointer;
+}
+.save-uid:hover{background:rgba(0,212,255,.16)}

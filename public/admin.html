@@ -80,7 +80,12 @@ async function load(){
  <tr>
    <td><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
    <td><input class="edit-name" data-id="${r.id}" value="${esc(r.name)}"></td>
-   <td><input class="edit-uid" data-id="${r.id}" value="${esc(r.uid||"")}"></td>
+   <td>
+     <div class="uid-edit-wrap">
+       <input class="edit-uid" data-id="${r.id}" value="${esc(r.uid||"")}" placeholder="UID">
+       <button class="save-uid" data-id="${r.id}" type="button">บันทึก UID</button>
+     </div>
+   </td>
    <td>
      <div class="amount-wrap">
        <input class="edit-amount" data-id="${r.id}" type="number" min="5" step="5" value="${r.amount}">
@@ -92,6 +97,18 @@ async function load(){
    <td class="actions"><button class="save" data-id="${r.id}">บันทึก</button><button class="skip" data-id="${r.id}">ไม่มา / ตัดสิทธิ์</button><button class="danger" data-id="${r.id}">ลบ</button></td>
  </tr>`).join("");
 
+ document.querySelectorAll(".save-uid").forEach(b=>b.onclick=async()=>{
+   const id=b.dataset.id;
+   const input=document.querySelector('.edit-uid[data-id="'+id+'"]');
+   const uid=input.value.trim();
+   if(!uid){alert("กรุณากรอก UID"); input.focus(); return;}
+   try{
+     await api("/api/queue/"+id+"/uid",{method:"PUT",body:JSON.stringify({uid})});
+     b.textContent="บันทึกแล้ว ✓";
+     setTimeout(()=>b.textContent="บันทึก UID",1200);
+     await load();
+   }catch(e){alert(e.message)}
+ });
  document.querySelectorAll(".save").forEach(b=>b.onclick=async()=>{
    const id=b.dataset.id;
    await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({
