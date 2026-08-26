@@ -40,15 +40,15 @@
       <div>
         <span class="section-kicker">QUEUE PRIORITY</span>
         <h3>⚡ กติกาลัดคิว</h3>
-        <p>ทุกยอดครบ 10 บาท = เพิ่มระดับคิว 1 ขั้น • ถ้าระดับเท่ากัน คนที่เข้าก่อนยังได้ก่อน</p>
+        <p>ทุกยอดครบ 5 บาท = เพิ่มระดับคิว 1 ขั้น • ถ้าระดับเท่ากัน คนที่เข้าก่อนยังได้ก่อน</p>
       </div>
       <div class="first-turn-pill">
         <span>ตัวอย่าง</span>
-        <b>10 → 20 → 30</b>
+        <b>5 → 10 → 15 → 20 → 25</b>
       </div>
     </div>
     <div class="priority-rule-row">
-      <div class="priority-rule"><b>10–19.99</b><span>ระดับ 1 • จองคิวปกติ</span></div>
+      <div class="priority-rule"><b>5–9.99</b><span>ระดับ 1 • จองคิวปกติ</span></div>
       <div class="priority-rule"><b>20–29.99</b><span>ระดับ 2 • ลัดขึ้น 1 ระดับ</span></div>
       <div class="priority-rule"><b>30–39.99</b><span>ระดับ 3 • ลัดขึ้น 2 ระดับ</span></div>
     </div>
@@ -82,7 +82,7 @@ async function load(){
    <td>
      <div class="amount-wrap">
        <input class="edit-amount" data-id="${r.id}" type="number" min="0" step="0.01" value="${r.amount}">
-       <span class="priority-level">LV.${Math.max(1,Math.floor((Number(r.amount)||0)/10))}</span>
+       <span class="priority-level">LV.${Math.max(1,Math.floor((Number(r.amount)||0)/5))}</span>
      </div>
    </td>
    <td><span class="time-chip">${formatDateTime(r.created_at)}</span></td>

@@ -25,7 +25,7 @@ async function load(){
 
     const active=rows.filter(r=>r.status!=="เสร็จแล้ว");
     const maxAmount=active.length?Math.max(...active.map(r=>Number(r.amount)||0)):0;
-    const nextTurn=maxAmount>0?maxAmount+10:10;
+    const nextTurn=maxAmount>0?maxAmount+5:5;
 
     // แสดง "ตอนนี้ถึงคิวใคร" = คนอันดับ 1 ที่ยังไม่เสร็จ
     const current=active[0];
@@ -56,7 +56,7 @@ async function load(){
     if(priorityRuleText){
       priorityRuleText.textContent=maxAmount>0
         ? `ยอดสูงสุดตอนนี้ ${fmt(maxAmount)} → ตาหน้า ${fmt(nextTurn)}`
-        : "ยังไม่มีคิว → ตาหน้าเริ่มที่ 10 บาท";
+        : "ยังไม่มีคิว → ตาหน้าเริ่มที่ 5 บาท";
     }
     if(priorityExampleTitle){
       priorityExampleTitle.textContent=maxAmount>0
@@ -65,14 +65,14 @@ async function load(){
     }
     if(priorityExampleText){
       priorityExampleText.textContent=maxAmount>0
-        ? `คนที่โดเนทสูงสุดจะอยู่ที่อันดับ 1 • ต้องโดเพิ่มอีก 10 บาทเพื่อได้ตาหน้า`
+        ? `คนที่โดเนทสูงสุดจะอยู่ที่อันดับ 1 • ต้องโดเพิ่มอีก 5 บาทเพื่อได้ตาหน้า`
         : "ระบบจะคำนวณจากยอดโดเนทสูงสุดในคิวให้อัตโนมัติ";
     }
 
     q.innerHTML=rows.map((r,i)=>{
       const amount=Number(r.amount)||0;
       const isTopDonor=maxAmount>0 && amount===maxAmount && r.status!=="เสร็จแล้ว";
-      const level=Math.max(1,Math.floor(amount/10));
+      const level=Math.max(1,Math.floor(amount/5));
       return `
       <tr data-id="${esc(r.id)}" class="${isTopDonor?"top-donor":""}">
         <td data-label="คิว"><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
