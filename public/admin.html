@@ -29,6 +29,7 @@
     <div class="section-head compact"><div><div class="section-kicker">NEW QUEUE</div><h3>เพิ่มคิวใหม่</h3><p>จองคิวขั้นต่ำ 20 บาท • ตาหน้าเริ่มที่ 20 บาท • ลัดคิวทีละ 5 บาท</p></div></div>
     <div class="form-grid">
       <div class="field"><label>ชื่อ</label><input id="name" placeholder="เช่น ปั้น"></div>
+      <div class="field"><label>UID</label><input id="uid" placeholder="เช่น 1234567890" inputmode="numeric"></div>
       <div class="field"><label>จำนวนเงิน (บาท)</label><input id="amount" type="number" min="20" step="5" placeholder="100"></div>
       <div class="field"><label>สถานะ</label><select id="status"><option>รอคิว</option><option>กำลังทำ</option><option>เสร็จแล้ว</option><option>ตัดสิทธิ์</option></select></div>
       <button id="add" class="primary-btn">＋ เพิ่มคิว</button>
@@ -58,7 +59,7 @@
     <div class="section-head compact"><div><div class="section-kicker">QUEUE MANAGER</div><h3>จัดการคิวทั้งหมด</h3></div><div id="rowCount" class="mini-badge">0 รายการ</div></div>
     <div class="table-shell">
       <table>
-        <thead><tr><th>คิว</th><th>ชื่อ</th><th>โดเนท</th><th>เพิ่มเมื่อ</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
+        <thead><tr><th>คิว</th><th>ชื่อ</th><th>UID</th><th>โดเนท</th><th>เพิ่มเมื่อ</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -79,6 +80,7 @@ async function load(){
  <tr>
    <td><span class="queue-number ${i<3?"top":""}">${i+1}</span></td>
    <td><input class="edit-name" data-id="${r.id}" value="${esc(r.name)}"></td>
+   <td><input class="edit-uid" data-id="${r.id}" value="${esc(r.uid||"")}"></td>
    <td>
      <div class="amount-wrap">
        <input class="edit-amount" data-id="${r.id}" type="number" min="5" step="5" value="${r.amount}">
@@ -94,6 +96,7 @@ async function load(){
    const id=b.dataset.id;
    await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({
      name:document.querySelector('.edit-name[data-id="'+id+'"]').value,
+     uid:document.querySelector('.edit-uid[data-id="'+id+'"]').value.trim(),
      amount:Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value),
      status:document.querySelector('.edit-status[data-id="'+id+'"]').value
    })}); await load();
@@ -102,8 +105,9 @@ async function load(){
    if(confirm("คนนี้โดเนทแล้วแต่ไม่มาใช่ไหม? ระบบจะตัดสิทธิ์และไม่นับเป็นคิวที่กำลังรอ")){
      const id=b.dataset.id;
      const rowName=document.querySelector('.edit-name[data-id="'+id+'"]').value;
+     const rowUid=document.querySelector('.edit-uid[data-id="'+id+'"]').value.trim();
      const rowAmount=Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value);
-     await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({name:rowName,amount:rowAmount,status:"ตัดสิทธิ์"})});
+     await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({name:rowName,uid:rowUid,amount:rowAmount,status:"ตัดสิทธิ์"})});
      await load();
    }
  });
@@ -113,9 +117,9 @@ document.querySelectorAll(".danger").forEach(b=>b.onclick=async()=>{
 }
 document.getElementById("add").onclick=async()=>{
  try{
-   const nameEl=document.getElementById("name"), amountEl=document.getElementById("amount"), statusEl=document.getElementById("status");
-   await api("/api/queue",{method:"POST",body:JSON.stringify({name:nameEl.value.trim(),amount:Number(amountEl.value),status:statusEl.value})});
-   nameEl.value="";amountEl.value="";statusEl.value="รอคิว";await load();
+   const nameEl=document.getElementById("name"), uidEl=document.getElementById("uid"), amountEl=document.getElementById("amount"), statusEl=document.getElementById("status");
+   await api("/api/queue",{method:"POST",body:JSON.stringify({name:nameEl.value.trim(),uid:uidEl.value.trim(),amount:Number(amountEl.value),status:statusEl.value})});
+   nameEl.value="";uidEl.value="";amountEl.value="";statusEl.value="รอคิว";await load();
  }catch(e){alert(e.message)}
 }
 document.getElementById("logout").onclick=async()=>{await api("/api/logout",{method:"POST"});location.href="/"}

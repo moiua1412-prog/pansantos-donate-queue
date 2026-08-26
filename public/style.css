@@ -1163,3 +1163,29 @@ button,input,select{font-family:inherit}
 @media(max-width:780px){
   .skip{font-size:9px;padding:7px 8px}
 }
+
+.uid-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:5px 8px;
+  border-radius:8px;
+  background:rgba(138,92,255,.08);
+  border:1px solid rgba(138,92,255,.20);
+  color:#b8a5ff;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+.edit-uid{
+  width:100%;
+  background:#070d1a;
+  color:#edf1fb;
+  border:1px solid #ffffff10;
+  border-radius:11px;
+  padding:12px;
+  outline:none;
+}
+@media(max-width:780px){
+  .uid-chip{font-size:8px;padding:4px 6px}
+}

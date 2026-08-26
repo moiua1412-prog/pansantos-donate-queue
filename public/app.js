@@ -83,6 +83,7 @@ async function load(){
             ${isTopDonor?'<span class="top-donor-badge">อันดับ 1 • ยอดสูงสุด</span>':''}
           </div>
         </td>
+        <td data-label="UID"><span class="uid-chip">${esc(r.uid||"-")}</span></td>
         <td data-label="โดเนท"><strong class="amount">${fmt(amount)}</strong></td>
         <td data-label="ระดับคิว"><span class="level-badge">LV.${level}</span></td>
         <td data-label="เพิ่มเมื่อ"><span class="time-chip">${formatDateTime(r.created_at)}</span></td>
@@ -91,7 +92,7 @@ async function load(){
     }).join("");
     q.classList.remove("loading");
   }catch(e){
-    q.innerHTML='<tr><td colspan="6" class="load-error">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชอีกครั้ง</td></tr>';
+    q.innerHTML='<tr><td colspan="7" class="load-error">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชอีกครั้ง</td></tr>';
   }
 }
 function fmt(n){return new Intl.NumberFormat("th-TH",{maximumFractionDigits:2}).format(n)+" บาท"}
