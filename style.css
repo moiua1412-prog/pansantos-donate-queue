@@ -1561,3 +1561,204 @@ p,span,a,strong,b,small,div {
   .queue-panel .amount{font-size:13px !important}
   .queue-panel .uid-chip{font-size:8px !important}
 }
+
+/* =========================================================
+   MOBILE QUEUE CARD V2 - FORCE TABLE TO TRUE CARDS
+   ========================================================= */
+@media (max-width:620px){
+  .queue-panel .table-shell{
+    width:100% !important;
+    overflow:visible !important;
+    border:0 !important;
+    border-radius:0 !important;
+  }
+
+  .queue-panel .table-shell table{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    border:0 !important;
+    border-collapse:separate !important;
+    border-spacing:0 !important;
+  }
+
+  .queue-panel .table-shell thead{
+    display:none !important;
+  }
+
+  .queue-panel .table-shell tbody{
+    display:flex !important;
+    width:100% !important;
+    flex-direction:column !important;
+    gap:10px !important;
+  }
+
+  .queue-panel .table-shell tbody tr{
+    display:grid !important;
+    width:100% !important;
+    min-width:0 !important;
+    grid-template-columns:1fr 1fr !important;
+    grid-template-areas:
+      "queue name"
+      "uid amount"
+      "level time"
+      "status status" !important;
+    margin:0 !important;
+    padding:12px !important;
+    gap:0 10px !important;
+    border-radius:16px !important;
+    background:linear-gradient(145deg,#10172b,#0a1020) !important;
+    border:1px solid rgba(120,138,190,.18) !important;
+    box-shadow:0 10px 26px rgba(0,0,0,.24) !important;
+  }
+
+  .queue-panel .table-shell tbody tr.top-donor{
+    border:1px solid rgba(255,211,72,.42) !important;
+    box-shadow:0 0 0 1px rgba(255,211,72,.08),0 12px 30px rgba(255,193,7,.12) !important;
+  }
+
+  .queue-panel .table-shell tbody td{
+    display:flex !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    align-items:center !important;
+    padding:8px 0 !important;
+    margin:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    overflow:hidden !important;
+  }
+
+  .queue-panel .table-shell tbody td::before{
+    content:attr(data-label) !important;
+    flex:0 0 34px !important;
+    width:34px !important;
+    min-width:34px !important;
+    margin:0 7px 0 0 !important;
+    color:#6f7b95 !important;
+    font-size:8px !important;
+    font-weight:700 !important;
+    line-height:1.2 !important;
+    text-align:left !important;
+  }
+
+  .queue-panel .table-shell tbody td:nth-child(1){grid-area:queue !important;}
+  .queue-panel .table-shell tbody td:nth-child(2){
+    grid-area:name !important;
+    padding-top:8px !important;
+  }
+  .queue-panel .table-shell tbody td:nth-child(3){grid-area:uid !important;}
+  .queue-panel .table-shell tbody td:nth-child(4){grid-area:amount !important;}
+  .queue-panel .table-shell tbody td:nth-child(5){grid-area:level !important;}
+  .queue-panel .table-shell tbody td:nth-child(6){grid-area:time !important;}
+  .queue-panel .table-shell tbody td:nth-child(7){
+    grid-area:status !important;
+    margin-top:4px !important;
+    padding-top:10px !important;
+    border-top:1px solid rgba(255,255,255,.07) !important;
+  }
+
+  .queue-panel .queue-number{
+    width:30px !important;
+    height:30px !important;
+    min-width:30px !important;
+    border-radius:9px !important;
+    font-size:12px !important;
+  }
+
+  .queue-panel .name-cell{
+    display:flex !important;
+    align-items:center !important;
+    width:100% !important;
+    min-width:0 !important;
+    gap:7px !important;
+    overflow:hidden !important;
+  }
+
+  .queue-panel .mini-avatar{
+    flex:0 0 30px !important;
+    width:30px !important;
+    height:30px !important;
+    min-width:30px !important;
+    border-radius:9px !important;
+    font-size:10px !important;
+  }
+
+  .queue-panel .name-cell strong{
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    font-size:12px !important;
+    font-weight:800 !important;
+  }
+
+  .queue-panel .top-donor-badge{
+    display:inline-flex !important;
+    max-width:112px !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    margin-left:4px !important;
+    font-size:7px !important;
+  }
+
+  .queue-panel .uid-chip{
+    display:inline-flex !important;
+    max-width:calc(100% - 41px) !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    padding:5px 7px !important;
+    font-size:9px !important;
+  }
+
+  .queue-panel .amount{
+    font-size:16px !important;
+    line-height:1.2 !important;
+    font-weight:900 !important;
+    color:#ffd54a !important;
+    white-space:nowrap !important;
+  }
+
+  .queue-panel .level-badge{
+    min-width:42px !important;
+    padding:4px 7px !important;
+    font-size:8px !important;
+  }
+
+  .queue-panel .time-chip{
+    max-width:calc(100% - 41px) !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    padding:4px 6px !important;
+    font-size:8px !important;
+  }
+
+  .queue-panel .status{
+    padding:5px 8px !important;
+    font-size:9px !important;
+  }
+
+  .queue-panel .crown{
+    font-size:14px !important;
+  }
+}
+
+@media (max-width:380px){
+  .queue-panel .table-shell tbody tr{
+    grid-template-columns:1fr 1fr !important;
+    padding:10px !important;
+  }
+  .queue-panel .table-shell tbody td::before{
+    flex-basis:30px !important;
+    width:30px !important;
+    min-width:30px !important;
+    font-size:7px !important;
+  }
+  .queue-panel .amount{font-size:14px !important}
+}
