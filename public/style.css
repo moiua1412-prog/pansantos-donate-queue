@@ -1140,3 +1140,5 @@ button,input,select{font-family:inherit}
   .level-badge{min-width:35px;padding:3px 5px;font-size:8px}
   .top-donor-badge{font-size:7px}
 }
+
+/* Minimum donation rule: 20 THB, lane cut step: 5 THB */
