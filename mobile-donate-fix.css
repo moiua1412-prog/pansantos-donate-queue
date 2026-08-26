@@ -1,0 +1,123 @@
+/* ===== MOBILE DONATE BUTTON FIX ===== */
+@media (max-width: 620px) {
+  /* Keep the donate area visible and above decorative layers */
+  .donate-nav,
+  .donate-box,
+  .donate-panel,
+  .donate-button,
+  .donate-btn,
+  .hero-actions {
+    position: relative;
+    z-index: 50;
+  }
+
+  /* Main donate button: compact, centered, readable */
+  .donate-nav a,
+  .donate-nav button,
+  .donate-box button,
+  .donate-panel button,
+  .donate-button,
+  .donate-btn {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 72px) !important;
+    min-height: 48px !important;
+    padding: 10px 18px !important;
+    margin: 8px auto !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+    letter-spacing: .1px !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  /* RGB animated border */
+  .donate-nav a::before,
+  .donate-nav button::before,
+  .donate-box button::before,
+  .donate-panel button::before,
+  .donate-button::before,
+  .donate-btn::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: -2px !important;
+    border-radius: inherit !important;
+    padding: 2px !important;
+    background: linear-gradient(
+      90deg,
+      #ff2d55,
+      #ff9f0a,
+      #ffd60a,
+      #30d158,
+      #00c7ff,
+      #0a84ff,
+      #bf5af2,
+      #ff2d55
+    ) !important;
+    background-size: 300% 100% !important;
+    animation: donateRgbMobile 3s linear infinite !important;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0) !important;
+    -webkit-mask-composite: xor !important;
+    mask-composite: exclude !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
+  }
+
+  .donate-nav a::after,
+  .donate-nav button::after,
+  .donate-box button::after,
+  .donate-panel button::after,
+  .donate-button::after,
+  .donate-btn::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    border-radius: inherit !important;
+    box-shadow: 0 0 16px rgba(0, 199, 255, .22) !important;
+    pointer-events: none !important;
+  }
+
+  .donate-nav a:active,
+  .donate-nav button:active,
+  .donate-box button:active,
+  .donate-panel button:active,
+  .donate-button:active,
+  .donate-btn:active {
+    transform: scale(.96) !important;
+  }
+
+  /* Prevent the finger/decorative animation from covering the button */
+  .finger,
+  .tap-finger,
+  .donate-finger,
+  .click-finger {
+    pointer-events: none !important;
+    z-index: 55 !important;
+  }
+
+  /* Improve cramped text in the donate section */
+  .donate-box p,
+  .donate-panel p,
+  .donate-copy,
+  .donate-description {
+    font-size: 12px !important;
+    line-height: 1.65 !important;
+    letter-spacing: .05px !important;
+    max-width: 92% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@keyframes donateRgbMobile {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}

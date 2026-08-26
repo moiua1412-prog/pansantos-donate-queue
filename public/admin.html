@@ -55,6 +55,7 @@
     </div>
   </section>
 
+  <div id="saveNotice" class="save-notice" aria-live="polite"></div>
   <section class="admin-table glass">
     <div class="section-head compact"><div><div class="section-kicker">QUEUE MANAGER</div><h3>จัดการคิวทั้งหมด</h3></div><div id="rowCount" class="mini-badge">0 รายการ</div></div>
     <div class="table-shell">
@@ -66,7 +67,16 @@
   </section>
 </main>
 <script>
-async function api(url,opt={}){const r=await fetch(url,{headers:{"Content-Type":"application/json"},...opt});if(r.status===401){location.href="/";return null}const d=await r.json();if(!r.ok)throw new Error(d.error||"เกิดข้อผิดพลาด");return d}
+async function api(url,opt={}){
+  const r=await fetch(url,{headers:{"Content-Type":"application/json","Accept":"application/json",...(opt.headers||{})},...opt});
+  if(r.status===401){location.href="/";return null}
+  const text=await r.text();
+  let d;
+  try{ d=text ? JSON.parse(text) : {}; }
+  catch(_){ throw new Error(`เซิร์ฟเวอร์ตอบกลับไม่ใช่ JSON (${r.status})`); }
+  if(!r.ok) throw new Error(d.error||`เกิดข้อผิดพลาด (${r.status})`);
+  return d;
+}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 function fmt(n){return new Intl.NumberFormat("th-TH",{maximumFractionDigits:2}).format(n)+" บาท"}
 function formatDateTime(v){const d=new Date(v);if(Number.isNaN(d.getTime()))return "-";return d.toLocaleString("th-TH",{hour:"2-digit",minute:"2-digit",hour12:false,day:"2-digit",month:"2-digit"})}
@@ -103,8 +113,15 @@ async function load(){
    const uid=input.value.trim();
    if(!uid){alert("กรุณากรอก UID"); input.focus(); return;}
    try{
-     await api("/api/queue/"+id+"/uid",{method:"PUT",body:JSON.stringify({uid})});
+     const rowName=document.querySelector('.edit-name[data-id="'+id+'"]').value.trim();
+     const rowAmount=Number(document.querySelector('.edit-amount[data-id="'+id+'"]').value);
+     const rowStatus=document.querySelector('.edit-status[data-id="'+id+'"]').value;
+     await api("/api/queue/"+id,{method:"PUT",body:JSON.stringify({
+       name:rowName,uid,amount:rowAmount,status:rowStatus
+     })});
      b.textContent="บันทึกแล้ว ✓";
+     const notice=document.getElementById("saveNotice");
+     if(notice){notice.textContent="✅ บันทึก UID เรียบร้อยแล้ว";notice.classList.add("show");setTimeout(()=>notice.classList.remove("show"),1800)}
      setTimeout(()=>b.textContent="บันทึก UID",1200);
      await load();
    }catch(e){alert(e.message)}

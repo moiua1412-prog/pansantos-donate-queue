@@ -12,7 +12,8 @@ const DATA_FILE = path.join(__dirname, "queue.json");
 function readQueue() {
   try {
     if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, "[]", "utf8");
-    return JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    const rows = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    return Array.isArray(rows) ? rows.map(r => ({...r, uid: String(r.uid ?? "").trim()})) : [];
   } catch {
     return [];
   }
@@ -42,10 +43,49 @@ function adminOnly(req,res,next){
   next();
 }
 
+function priorityLevel(amount) {
+  const value = Number(amount) || 0;
+  if (value < 5) return 0;
+  return Math.floor((value - 5) / 5) + 1;
+}
+
+function sortQueue(rows) {
+  return [...rows].sort((a,b) => {
+    const disqualifiedA = a.status === "ตัดสิทธิ์" ? 1 : 0;
+    const disqualifiedB = b.status === "ตัดสิทธิ์" ? 1 : 0;
+    if (disqualifiedA !== disqualifiedB) return disqualifiedA - disqualifiedB;
+
+    const doingA = a.status === "กำลังทำ" ? 1 : 0;
+    const doingB = b.status === "กำลังทำ" ? 1 : 0;
+    if (doingA !== doingB) return doingB - doingA;
+
+    const doneA = a.status === "เสร็จแล้ว" ? 1 : 0;
+    const doneB = b.status === "เสร็จแล้ว" ? 1 : 0;
+    if (doneA !== doneB) return doneA - doneB;
+
+    const levelDiff = priorityLevel(b.amount) - priorityLevel(a.amount);
+    if (levelDiff !== 0) return levelDiff;
+
+    const timeDiff = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+    if (Number.isFinite(timeDiff) && timeDiff !== 0) return timeDiff;
+    return Number(a.id) - Number(b.id);
+  });
+}
+
 app.get("/api/queue", (req,res)=>{
-  const rows = readQueue().sort((a,b)=>a.id-b.id);
-  const total = rows.reduce((s,r)=>s+Number(r.amount||0),0);
-  res.json({rows,total});
+  const raw = readQueue();
+  const rows = sortQueue(raw);
+  const active = rows.filter(r => r.status !== "เสร็จแล้ว" && r.status !== "ตัดสิทธิ์");
+  const maxAmount = active.length ? Math.max(...active.map(r => Number(r.amount)||0)) : 0;
+  const maxLevel = active.length ? Math.max(...active.map(r => priorityLevel(r.amount))) : 0;
+  const firstTurnAmount = active.length ? Math.max(20, maxAmount + 5) : 20;
+  const firstTurnName = active.length ? active[0].name : "";
+  const total = raw.reduce((s,r)=>s+Number(r.amount||0),0);
+  res.json({
+    rows,
+    total,
+    queueRules: {step:5,maxAmount,maxLevel,firstTurnAmount,firstTurnName}
+  });
 });
 
 app.post("/api/login",(req,res)=>{
@@ -64,13 +104,14 @@ app.post("/api/logout", adminOnly, (req,res)=>{
 app.post("/api/queue", adminOnly, (req,res)=>{
   const name=String(req.body.name||"").trim();
   const amount=Number(req.body.amount);
+  const uid=String(req.body.uid||"").trim();
   const status=String(req.body.status||"รอคิว");
-  if(!name || !Number.isFinite(amount) || amount<0)
-    return res.status(400).json({error:"ข้อมูลไม่ถูกต้อง"});
+  if(!name || !uid || !Number.isFinite(amount) || amount<20 || Math.abs((amount-20)%5)>0.000001)
+    return res.status(400).json({error:"ยอดจองคิวขั้นต่ำ 20 บาท และต้องเพิ่มทีละ 5 บาท"});
   const rows=readQueue();
   const now = new Date();
   const localIso = new Date(now.getTime() - now.getTimezoneOffset()*60000).toISOString();
-  const item={id:nextId(rows),name,amount,status,created_at:localIso};
+  const item={id:nextId(rows),name,uid,amount,status,priority_level:priorityLevel(amount),created_at:localIso};
   rows.push(item);
   writeQueue(rows);
   res.json({ok:true,id:item.id});
@@ -80,15 +121,28 @@ app.put("/api/queue/:id", adminOnly, (req,res)=>{
   const id=Number(req.params.id);
   const name=String(req.body.name||"").trim();
   const amount=Number(req.body.amount);
+  const uid=String(req.body.uid||"").trim();
   const status=String(req.body.status||"รอคิว");
-  if(!name || !Number.isFinite(amount) || amount<0)
-    return res.status(400).json({error:"ข้อมูลไม่ถูกต้อง"});
+  if(!name || !uid || !Number.isFinite(amount) || amount<20 || Math.abs((amount-20)%5)>0.000001)
+    return res.status(400).json({error:"ยอดจองคิวขั้นต่ำ 20 บาท และต้องเพิ่มทีละ 5 บาท"});
   const rows=readQueue();
   const item=rows.find(r=>r.id===id);
   if(!item) return res.status(404).json({error:"ไม่พบคิว"});
-  item.name=name; item.amount=amount; item.status=status;
+  item.name=name; item.uid=uid; item.amount=amount; item.status=status; item.priority_level=priorityLevel(amount);
   writeQueue(rows);
   res.json({ok:true});
+});
+
+app.put("/api/queue/:id/uid", adminOnly, (req,res)=>{
+  const id=Number(req.params.id);
+  const uid=String(req.body.uid ?? "").trim();
+  if(!uid) return res.status(400).json({error:"กรุณากรอก UID"});
+  const rows=readQueue();
+  const item=rows.find(r=>r.id===id);
+  if(!item) return res.status(404).json({error:"ไม่พบคิว"});
+  item.uid=uid;
+  writeQueue(rows);
+  res.json({ok:true,uid:item.uid});
 });
 
 app.delete("/api/queue/:id", adminOnly, (req,res)=>{

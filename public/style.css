@@ -1219,3 +1219,23 @@ button,input,select{font-family:inherit}
   cursor:pointer;
 }
 .save-uid:hover{background:rgba(0,212,255,.16)}
+
+.save-notice{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translate(-50%,14px);
+  opacity:0;
+  pointer-events:none;
+  z-index:2000;
+  padding:10px 14px;
+  border-radius:12px;
+  color:#8ff7c0;
+  background:rgba(12,35,28,.95);
+  border:1px solid rgba(66,236,156,.28);
+  box-shadow:0 14px 36px rgba(0,0,0,.35);
+  font-size:12px;
+  font-weight:800;
+  transition:.2s ease;
+}
+.save-notice.show{opacity:1;transform:translate(-50%,0)}
