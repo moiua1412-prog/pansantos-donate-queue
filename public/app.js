@@ -25,7 +25,7 @@ async function load(){
 
     const active=rows.filter(r=>r.status!=="เสร็จแล้ว" && r.status!=="ตัดสิทธิ์");
     const maxAmount=active.length?Math.max(...active.map(r=>Number(r.amount)||0)):0;
-    const nextTurn=maxAmount>0?Math.max(5,maxAmount+5):5;
+    const nextTurn=maxAmount>0?Math.max(20,maxAmount+5):20;
 
     // แสดง "ตอนนี้ถึงคิวใคร" = คนอันดับ 1 ที่ยังไม่เสร็จ
     const current=active[0];
