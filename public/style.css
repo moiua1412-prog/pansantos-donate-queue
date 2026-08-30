@@ -1247,3 +1247,614 @@ button,input,select{font-family:inherit}
   .clan-history-section .wrap{width:100%;margin:0}
   .clan-history-section .section-head h1{font-size:28px}
 }
+
+
+/* ===== MOBILE FONT CONSISTENCY ===== */
+body,
+button,
+input,
+select,
+textarea,
+table,
+th,
+td,
+h1,h2,h3,h4,h5,h6,
+p,span,a,strong,b,small,div {
+  font-family: "Noto Sans Thai", "Inter", Arial, sans-serif;
+}
+
+@media (max-width: 780px) {
+  body,
+  button,
+  input,
+  select,
+  textarea,
+  table,
+  th,
+  td {
+    font-family: "Noto Sans Thai", "Inter", Arial, sans-serif !important;
+  }
+
+  .topbar,
+  .hero,
+  .stats-grid,
+  .current-turn,
+  .priority-board,
+  .queue-panel,
+  .admin-hero,
+  .admin-form,
+  .admin-table,
+  .modal,
+  .clan-history-section {
+    font-family: "Noto Sans Thai", "Inter", Arial, sans-serif !important;
+  }
+
+  .brand h1 { font-weight: 800; }
+  .brand p { font-weight: 500; }
+
+  .hero h2,
+  .section-head h3,
+  .priority-head h3,
+  .current-turn-copy h3 {
+    font-weight: 800;
+    letter-spacing: -0.25px;
+    word-break: keep-all;
+  }
+
+  .hero-copy p,
+  .section-head p,
+  .current-turn-copy p,
+  .priority-example p,
+  .donate-sub,
+  .last-update {
+    font-weight: 500;
+    word-break: keep-all;
+  }
+
+  .donate-main,
+  .primary-btn,
+  .nav-admin,
+  .donate-nav,
+  .current-turn-btn {
+    font-family: "Noto Sans Thai", "Inter", Arial, sans-serif !important;
+    font-weight: 800;
+  }
+
+  .table-shell,
+  .table-shell table,
+  .table-shell th,
+  .table-shell td {
+    font-family: "Noto Sans Thai", "Inter", Arial, sans-serif !important;
+  }
+
+  /* prevent Thai glyphs from looking cramped */
+  .hero-copy,
+  .priority-board,
+  .current-turn,
+  .queue-panel {
+    line-height: 1.65;
+  }
+
+  /* Carousel captions too */
+  .clan-history-section .meta,
+  .clan-history-section .meta h2,
+  .clan-history-section .meta p,
+  .clan-history-section .timeline button,
+  .clan-history-section .kicker,
+  .clan-history-section .sub,
+  .clan-history-section .badge {
+    font-family: "Noto Sans Thai", "Inter", Arial, sans-serif !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE QUEUE CARD FIX
+   Makes each donor card readable instead of a broken grid.
+   ========================================================= */
+@media (max-width:620px){
+  .queue-panel .table-shell{
+    overflow:visible !important;
+    width:100%;
+  }
+
+  .queue-panel .table-shell table{
+    width:100% !important;
+    min-width:0 !important;
+    table-layout:fixed;
+    border-spacing:0 8px !important;
+  }
+
+  .queue-panel .table-shell tbody tr{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    grid-template-areas:
+      "queue name"
+      "uid amount"
+      "level time"
+      "status status";
+    column-gap:10px;
+    row-gap:0;
+    width:100%;
+    padding:11px 12px !important;
+    border-radius:15px !important;
+    background:
+      linear-gradient(145deg,rgba(15,22,42,.92),rgba(7,12,25,.92)) !important;
+    border:1px solid rgba(120,138,190,.16) !important;
+    box-shadow:0 10px 24px rgba(0,0,0,.20);
+  }
+
+  .queue-panel .table-shell tbody td{
+    display:flex !important;
+    align-items:center;
+    min-width:0 !important;
+    width:100% !important;
+    padding:7px 0 !important;
+    border:0 !important;
+    font-size:11px !important;
+    line-height:1.4 !important;
+    overflow:hidden;
+  }
+
+  .queue-panel .table-shell tbody td::before{
+    flex:0 0 auto;
+    min-width:36px !important;
+    margin-right:7px !important;
+    color:#68748f !important;
+    font-size:8px !important;
+    font-weight:700 !important;
+    line-height:1.2 !important;
+    letter-spacing:.2px;
+  }
+
+  .queue-panel .table-shell tbody td:nth-child(1){
+    grid-area:queue;
+  }
+  .queue-panel .table-shell tbody td:nth-child(2){
+    grid-area:name;
+    border:0 !important;
+    padding-bottom:7px !important;
+  }
+  .queue-panel .table-shell tbody td:nth-child(3){
+    grid-area:uid;
+  }
+  .queue-panel .table-shell tbody td:nth-child(4){
+    grid-area:amount;
+  }
+  .queue-panel .table-shell tbody td:nth-child(5){
+    grid-area:level;
+  }
+  .queue-panel .table-shell tbody td:nth-child(6){
+    grid-area:time;
+  }
+  .queue-panel .table-shell tbody td:nth-child(7){
+    grid-area:status;
+    padding-top:9px !important;
+    margin-top:3px;
+    border-top:1px solid rgba(255,255,255,.06) !important;
+  }
+
+  .queue-panel .table-shell tbody td:nth-child(1)::before{content:"คิว";}
+  .queue-panel .table-shell tbody td:nth-child(2)::before{content:"ชื่อ";}
+  .queue-panel .table-shell tbody td:nth-child(3)::before{content:"UID";}
+  .queue-panel .table-shell tbody td:nth-child(4)::before{content:"โดเนท";}
+  .queue-panel .table-shell tbody td:nth-child(5)::before{content:"ระดับ";}
+  .queue-panel .table-shell tbody td:nth-child(6)::before{content:"เวลา";}
+  .queue-panel .table-shell tbody td:nth-child(7)::before{content:"สถานะ";}
+
+  .queue-panel .name-cell{
+    display:flex !important;
+    align-items:center !important;
+    min-width:0 !important;
+    width:100% !important;
+    gap:7px !important;
+    overflow:hidden;
+  }
+
+  .queue-panel .name-cell .mini-avatar{
+    flex:0 0 29px !important;
+    width:29px !important;
+    height:29px !important;
+    border-radius:9px !important;
+  }
+
+  .queue-panel .name-cell strong{
+    min-width:0;
+    max-width:100%;
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:11px !important;
+    font-weight:800;
+  }
+
+  .queue-panel .top-donor-badge{
+    flex:0 0 auto;
+    margin-left:4px !important;
+    max-width:112px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:7px !important;
+    padding:3px 5px !important;
+  }
+
+  .queue-panel .crown{
+    font-size:14px !important;
+    margin-right:2px !important;
+  }
+
+  .queue-panel .queue-number{
+    flex:0 0 auto;
+    width:28px !important;
+    height:28px !important;
+    border-radius:9px !important;
+    font-size:11px !important;
+  }
+
+  .queue-panel .uid-chip{
+    min-width:0;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    padding:5px 7px !important;
+    font-size:9px !important;
+  }
+
+  .queue-panel .amount{
+    font-size:15px !important;
+    font-weight:900 !important;
+    color:#ffd54a !important;
+    white-space:nowrap;
+  }
+
+  .queue-panel .level-badge{
+    padding:4px 7px !important;
+    min-width:40px;
+    font-size:8px !important;
+  }
+
+  .queue-panel .time-chip{
+    max-width:100%;
+    padding:4px 6px !important;
+    font-size:8px !important;
+    white-space:nowrap;
+  }
+
+  .queue-panel .status{
+    padding:5px 8px !important;
+    font-size:9px !important;
+    border-radius:999px !important;
+  }
+
+  .queue-panel .status i{
+    width:6px !important;
+    height:6px !important;
+  }
+
+  .queue-panel .table-shell tbody tr.top-donor{
+    border-color:rgba(255,209,70,.38) !important;
+    box-shadow:
+      0 0 0 1px rgba(255,209,70,.10),
+      0 12px 30px rgba(255,190,50,.08);
+  }
+}
+
+@media (max-width:380px){
+  .queue-panel .table-shell tbody tr{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    padding:9px 10px !important;
+    column-gap:8px;
+  }
+
+  .queue-panel .table-shell tbody td{
+    font-size:10px !important;
+  }
+
+  .queue-panel .table-shell tbody td::before{
+    min-width:31px !important;
+    margin-right:5px !important;
+    font-size:7px !important;
+  }
+
+  .queue-panel .amount{font-size:13px !important}
+  .queue-panel .uid-chip{font-size:8px !important}
+}
+
+/* =========================================================
+   MOBILE QUEUE CARD V2 - FORCE TABLE TO TRUE CARDS
+   ========================================================= */
+@media (max-width:620px){
+  .queue-panel .table-shell{
+    width:100% !important;
+    overflow:visible !important;
+    border:0 !important;
+    border-radius:0 !important;
+  }
+
+  .queue-panel .table-shell table{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    border:0 !important;
+    border-collapse:separate !important;
+    border-spacing:0 !important;
+  }
+
+  .queue-panel .table-shell thead{
+    display:none !important;
+  }
+
+  .queue-panel .table-shell tbody{
+    display:flex !important;
+    width:100% !important;
+    flex-direction:column !important;
+    gap:10px !important;
+  }
+
+  .queue-panel .table-shell tbody tr{
+    display:grid !important;
+    width:100% !important;
+    min-width:0 !important;
+    grid-template-columns:1fr 1fr !important;
+    grid-template-areas:
+      "queue name"
+      "uid amount"
+      "level time"
+      "status status" !important;
+    margin:0 !important;
+    padding:12px !important;
+    gap:0 10px !important;
+    border-radius:16px !important;
+    background:linear-gradient(145deg,#10172b,#0a1020) !important;
+    border:1px solid rgba(120,138,190,.18) !important;
+    box-shadow:0 10px 26px rgba(0,0,0,.24) !important;
+  }
+
+  .queue-panel .table-shell tbody tr.top-donor{
+    border:1px solid rgba(255,211,72,.42) !important;
+    box-shadow:0 0 0 1px rgba(255,211,72,.08),0 12px 30px rgba(255,193,7,.12) !important;
+  }
+
+  .queue-panel .table-shell tbody td{
+    display:flex !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    align-items:center !important;
+    padding:8px 0 !important;
+    margin:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    overflow:hidden !important;
+  }
+
+  .queue-panel .table-shell tbody td::before{
+    content:attr(data-label) !important;
+    flex:0 0 34px !important;
+    width:34px !important;
+    min-width:34px !important;
+    margin:0 7px 0 0 !important;
+    color:#6f7b95 !important;
+    font-size:8px !important;
+    font-weight:700 !important;
+    line-height:1.2 !important;
+    text-align:left !important;
+  }
+
+  .queue-panel .table-shell tbody td:nth-child(1){grid-area:queue !important;}
+  .queue-panel .table-shell tbody td:nth-child(2){
+    grid-area:name !important;
+    padding-top:8px !important;
+  }
+  .queue-panel .table-shell tbody td:nth-child(3){grid-area:uid !important;}
+  .queue-panel .table-shell tbody td:nth-child(4){grid-area:amount !important;}
+  .queue-panel .table-shell tbody td:nth-child(5){grid-area:level !important;}
+  .queue-panel .table-shell tbody td:nth-child(6){grid-area:time !important;}
+  .queue-panel .table-shell tbody td:nth-child(7){
+    grid-area:status !important;
+    margin-top:4px !important;
+    padding-top:10px !important;
+    border-top:1px solid rgba(255,255,255,.07) !important;
+  }
+
+  .queue-panel .queue-number{
+    width:30px !important;
+    height:30px !important;
+    min-width:30px !important;
+    border-radius:9px !important;
+    font-size:12px !important;
+  }
+
+  .queue-panel .name-cell{
+    display:flex !important;
+    align-items:center !important;
+    width:100% !important;
+    min-width:0 !important;
+    gap:7px !important;
+    overflow:hidden !important;
+  }
+
+  .queue-panel .mini-avatar{
+    flex:0 0 30px !important;
+    width:30px !important;
+    height:30px !important;
+    min-width:30px !important;
+    border-radius:9px !important;
+    font-size:10px !important;
+  }
+
+  .queue-panel .name-cell strong{
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    font-size:12px !important;
+    font-weight:800 !important;
+  }
+
+  .queue-panel .top-donor-badge{
+    display:inline-flex !important;
+    max-width:112px !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    margin-left:4px !important;
+    font-size:7px !important;
+  }
+
+  .queue-panel .uid-chip{
+    display:inline-flex !important;
+    max-width:calc(100% - 41px) !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    padding:5px 7px !important;
+    font-size:9px !important;
+  }
+
+  .queue-panel .amount{
+    font-size:16px !important;
+    line-height:1.2 !important;
+    font-weight:900 !important;
+    color:#ffd54a !important;
+    white-space:nowrap !important;
+  }
+
+  .queue-panel .level-badge{
+    min-width:42px !important;
+    padding:4px 7px !important;
+    font-size:8px !important;
+  }
+
+  .queue-panel .time-chip{
+    max-width:calc(100% - 41px) !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    padding:4px 6px !important;
+    font-size:8px !important;
+  }
+
+  .queue-panel .status{
+    padding:5px 8px !important;
+    font-size:9px !important;
+  }
+
+  .queue-panel .crown{
+    font-size:14px !important;
+  }
+}
+
+@media (max-width:380px){
+  .queue-panel .table-shell tbody tr{
+    grid-template-columns:1fr 1fr !important;
+    padding:10px !important;
+  }
+  .queue-panel .table-shell tbody td::before{
+    flex-basis:30px !important;
+    width:30px !important;
+    min-width:30px !important;
+    font-size:7px !important;
+  }
+  .queue-panel .amount{font-size:14px !important}
+}
+
+
+/* ===== YouTube channel button ===== */
+.youtube-btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:46px;
+  padding:10px 42px 10px 14px;
+  border-radius:13px;
+  color:#fff !important;
+  text-decoration:none !important;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.25;
+  overflow:visible;
+  isolation:isolate;
+  background:
+    linear-gradient(135deg,#ff2d3d,#ff4f7a) padding-box,
+    conic-gradient(from 0deg,#ff2d55,#ff8a65,#ffe600,#ff2d55) border-box;
+  border:2px solid transparent;
+  box-shadow:0 8px 24px rgba(255,45,85,.20);
+  animation:youtubePulse 1.9s ease-in-out infinite, youtubeRgb 4s linear infinite;
+  transition:transform .18s ease,filter .18s ease;
+}
+.youtube-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.youtube-btn:active{transform:scale(.97)}
+.youtube-icon{
+  width:23px;height:17px;
+  display:grid;place-items:center;
+  border-radius:6px;
+  background:#fff;
+  color:#ff3046;
+  font-size:11px;
+  line-height:1;
+  box-shadow:0 0 10px rgba(255,255,255,.18);
+}
+.youtube-finger{
+  position:absolute;
+  right:7px;
+  bottom:-17px;
+  z-index:5;
+  font-size:27px;
+  line-height:1;
+  filter:drop-shadow(0 5px 8px rgba(0,0,0,.5));
+  pointer-events:none;
+  transform-origin:70% 75%;
+  animation:youtubeFinger 1.45s cubic-bezier(.45,0,.55,1) infinite;
+}
+.youtube-tap-ring{
+  position:absolute;
+  right:12px;
+  top:50%;
+  width:22px;height:22px;
+  margin-top:-11px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.9);
+  opacity:0;
+  pointer-events:none;
+  animation:youtubeRing 1.45s ease-out infinite;
+}
+@keyframes youtubePulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.018)}
+}
+@keyframes youtubeRgb{
+  0%{background-position:0% 50%,0% 50%}
+  100%{background-position:0% 50%,360% 50%}
+}
+@keyframes youtubeFinger{
+  0%,100%{transform:translate(8px,16px) rotate(-14deg);opacity:.28}
+  20%{transform:translate(3px,7px) rotate(-7deg);opacity:1}
+  43%{transform:translate(0,0) rotate(0deg) scale(.9);opacity:1}
+  58%{transform:translate(0,3px) rotate(2deg) scale(1.02);opacity:1}
+  78%{transform:translate(4px,10px) rotate(-6deg);opacity:.8}
+}
+@keyframes youtubeRing{
+  0%,35%{transform:scale(.3);opacity:0}
+  43%{transform:scale(.45);opacity:.9}
+  70%{transform:scale(1.5);opacity:0}
+  100%{transform:scale(1.5);opacity:0}
+}
+@media(max-width:620px){
+  .youtube-btn{
+    width:auto !important;
+    min-height:40px;
+    padding:8px 39px 8px 11px;
+    font-size:10px !important;
+    border-radius:11px;
+  }
+  .youtube-icon{width:21px;height:15px;font-size:10px}
+  .youtube-finger{right:5px;bottom:-15px;font-size:24px}
+  .youtube-tap-ring{right:10px;width:19px;height:19px;margin-top:-9px}
+}
